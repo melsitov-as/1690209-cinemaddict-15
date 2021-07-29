@@ -1,15 +1,14 @@
-const createFilmsList = () => {
-  return `<section class="films">
+const createFilmsList = () =>
+  `<section class="films">
     <section class="films-list">
       <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
       <div class="films-list__container">
       </div>
     </section>
-  </section>`
-}
+  </section>`;
 
-const createFilmCard = () => {
-  return `<article class="film-card">
+const createFilmCard = () =>
+  `<article class="film-card">
     <h3 class="film-card__title">Popeye the Sailor Meets Sindbad the Sailor</h3>
     <p class="film-card__rating">6.3</p>
     <p class="film-card__info">
@@ -25,7 +24,20 @@ const createFilmCard = () => {
       <button class="film-card__controls-item film-card__controls-item--mark-as-watched film-card__controls-item--active" type="button">Mark as watched</button>
       <button class="film-card__controls-item film-card__controls-item--favorite film-card__controls-item--active" type="button">Mark as favorite</button>
     </div>
-  </article>`
-}
+  </article>`;
 
-export {createFilmsList, createFilmCard};
+const createTopRatedFilmsList = () =>
+  `<section class="films-list films-list--extra films-list--top-rated">
+    <h2 class="films-list__title">Top rated</h2>
+    <div class="films-list__container">
+    </div>
+  </section>`;
+
+const createMostCommentedFilmsList = () =>
+  `<section class="films-list films-list--extra films-list--most-commented"">
+    <h2 class="films-list__title">Most commented</h2>
+    <div class="films-list__container">
+    </div>
+    </section>`;
+
+export {createFilmsList, createFilmCard, createTopRatedFilmsList, createMostCommentedFilmsList};

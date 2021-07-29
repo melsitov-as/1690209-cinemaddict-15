@@ -1,5 +1,5 @@
-const createMenu = () => {
-  return `<nav class="main-navigation">
+const createMenu = () =>
+  `<nav class="main-navigation">
       <div class="main-navigation__items">
         <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
         <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">0</span></a>
@@ -7,46 +7,44 @@ const createMenu = () => {
         <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">0</span></a>
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
-  </nav>`
-}
+  </nav>`;
 
-const createFilters = () => {
-  return ` <ul class="sort">
+const createFilters = () =>
+  `<ul class="sort">
     <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
     <li><a href="#" class="sort__button">Sort by date</a></li>
     <li><a href="#" class="sort__button">Sort by rating</a></li>
-  </ul>`
-}
+  </ul>`;
 
-const createStatistics = () => {
-  return `<section class="statistic">
-  <p class="statistic__rank">
-    Your rank
-    <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-    <span class="statistic__rank-label">Movie buff</span>
-  </p>
+const createStatistics = () =>
+  `<section class="statistic">
+    <p class="statistic__rank">
+      Your rank
+      <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+      <span class="statistic__rank-label">Movie buff</span>
+    </p>
 
-  <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
-    <p class="statistic__filters-description">Show stats:</p>
+    <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
+      <p class="statistic__filters-description">Show stats:</p>
 
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
-    <label for="statistic-all-time" class="statistic__filters-label">All time</label>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
+      <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today">
-    <label for="statistic-today" class="statistic__filters-label">Today</label>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today">
+      <label for="statistic-today" class="statistic__filters-label">Today</label>
 
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week">
-    <label for="statistic-week" class="statistic__filters-label">Week</label>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week">
+      <label for="statistic-week" class="statistic__filters-label">Week</label>
 
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month">
-    <label for="statistic-month" class="statistic__filters-label">Month</label>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month">
+      <label for="statistic-month" class="statistic__filters-label">Month</label>
 
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
-    <label for="statistic-year" class="statistic__filters-label">Year</label>
-  </form>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
+      <label for="statistic-year" class="statistic__filters-label">Year</label>
+    </form>
 
-  <ul class="statistic__text-list">
-    <li class="statistic__text-item">
+    <ul class="statistic__text-list">
+      <li class="statistic__text-item">
       <h4 class="statistic__item-title">You watched</h4>
       <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
     </li>
@@ -64,7 +62,6 @@ const createStatistics = () => {
     <canvas class="statistic__chart" width="1000"></canvas>
   </div>
 
-  </section>`
-}
+  </section>`;
 
-export {createMenu, createFilters, createStatistics}
+export {createMenu, createFilters, createStatistics};
