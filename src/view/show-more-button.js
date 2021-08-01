@@ -1,3 +1,5 @@
+// Создает кнопку "Show more"
+
 const createShowMoreButton = () =>
   '<button class="films-list__show-more">Show more</button>';
 

@@ -3,6 +3,8 @@ import { createFilmsList, createFilmCard, createTopRatedFilmsList, createMostCom
 import { createUserRank} from './view/user-rank.js';
 import { createShowMoreButton } from './view/show-more-button.js';
 import { createPopup } from './view/popup.js';
+import { generateFilmCard } from './mock/task-mock.js';
+
 
 let filmsList;
 let films;
@@ -10,10 +12,12 @@ const body = document.querySelector('body');
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 
-
+// Рендер элементов
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
+
+// Рендер списка фильмов
 
 const renderFilmsList = (container, templateFilmsList, templateFilmCard, place) => {
   container.insertAdjacentHTML(place, templateFilmsList);
@@ -29,6 +33,8 @@ const renderFilmsList = (container, templateFilmsList, templateFilmCard, place) 
     filmsList,
   };
 };
+
+// Рендер списков фильмов с наибольшим числом комментариев и фильмов с самым высоким рейтингом
 
 const renderFilmsListExtra = (container, templateFilmsListExtra, templateFilmCard, name, place) => {
   container.insertAdjacentHTML(place, templateFilmsListExtra);
@@ -47,5 +53,6 @@ renderFilmsList(main, createFilmsList(), createFilmCard, 'beforeend');
 render(filmsList, createShowMoreButton(), 'beforeend');
 renderFilmsListExtra(films, createTopRatedFilmsList(), createFilmCard, 'top-rated', 'beforeend');
 renderFilmsListExtra(films, createMostCommentedFilmsList(), createFilmCard, 'most-commented', 'beforeend');
-render(body, createPopup(), 'beforeend');
+// render(body, createPopup(), 'beforeend');
+console.log(generateFilmCard());
 

@@ -1,3 +1,5 @@
+// Создает меню
+
 const createMenu = () =>
   `<nav class="main-navigation">
       <div class="main-navigation__items">
@@ -9,12 +11,16 @@ const createMenu = () =>
       <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`;
 
+// Создает фильтры
+
 const createFilters = () =>
   `<ul class="sort">
     <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
     <li><a href="#" class="sort__button">Sort by date</a></li>
     <li><a href="#" class="sort__button">Sort by rating</a></li>
   </ul>`;
+
+// Создает статистику
 
 const createStatistics = () =>
   `<section class="statistic">

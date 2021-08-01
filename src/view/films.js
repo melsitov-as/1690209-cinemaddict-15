@@ -1,3 +1,5 @@
+// Создает список фильмов
+
 const createFilmsList = () =>
   `<section class="films">
     <section class="films-list">
@@ -6,6 +8,8 @@ const createFilmsList = () =>
       </div>
     </section>
   </section>`;
+
+// Создает карточку фильма
 
 const createFilmCard = () =>
   `<article class="film-card">
@@ -26,12 +30,16 @@ const createFilmCard = () =>
     </div>
   </article>`;
 
+// Создает список фильмов с наибольшим рейтингом
+
 const createTopRatedFilmsList = () =>
   `<section class="films-list films-list--extra films-list--top-rated">
     <h2 class="films-list__title">Top rated</h2>
     <div class="films-list__container">
     </div>
   </section>`;
+
+// Создает список фильмов с наибольшим числом комментариев
 
 const createMostCommentedFilmsList = () =>
   `<section class="films-list films-list--extra films-list--most-commented"">
