@@ -1,12 +1,12 @@
 // Создает меню
 
-const createMenu = () =>
+const createMenu = (statisticsData) =>
   `<nav class="main-navigation">
       <div class="main-navigation__items">
         <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-        <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">0</span></a>
-        <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">0</span></a>
-        <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">0</span></a>
+        <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">${statisticsData.inWatchlistCount}</span></a>
+        <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">${statisticsData.inHistoryCount}</span></a>
+        <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">${statisticsData.inFavoritesCount}</span></a>
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`;
@@ -22,7 +22,7 @@ const createFilters = () =>
 
 // Создает статистику
 
-const createStatistics = () =>
+const createStatistics = (statisticsData) =>
   `<section class="statistic">
     <p class="statistic__rank">
       Your rank
@@ -52,15 +52,15 @@ const createStatistics = () =>
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
       <h4 class="statistic__item-title">You watched</h4>
-      <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+      <p class="statistic__item-text">${statisticsData.inHistoryCount}<span class="statistic__item-description">movies</span></p>
     </li>
     <li class="statistic__text-item">
       <h4 class="statistic__item-title">Total duration</h4>
-      <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+      <p class="statistic__item-text">${statisticsData.totalDurationInH}<span class="statistic__item-description">h</span> ${statisticsData.totalDurationInM} <span class="statistic__item-description">m</span></p>
     </li>
     <li class="statistic__text-item">
       <h4 class="statistic__item-title">Top genre</h4>
-      <p class="statistic__item-text">Sci-Fi</p>
+      <p class="statistic__item-text">${statisticsData.topGenre}</p>
     </li>
   </ul>
 

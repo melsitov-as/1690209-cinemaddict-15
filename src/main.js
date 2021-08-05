@@ -1,58 +1,121 @@
 import { createMenu, createFilters, createStatistics } from './view/menu.js';
-import { createFilmsList, createFilmCard, createTopRatedFilmsList, createMostCommentedFilmsList } from './view/films.js';
+import { createFilmsContainer, createFilmCard, createTopRatedFilmsList, createMostCommentedFilmsList } from './view/films.js';
 import { createUserRank} from './view/user-rank.js';
 import { createShowMoreButton } from './view/show-more-button.js';
-import { createPopup } from './view/popup.js';
-import { generateFilmCard } from './mock/task-mock.js';
+import { createPopup, createCommentItem, createGenreItem } from './view/popup.js';
+import { generateFilmCard, generateCommentsList } from './mock/film-card-mock.js';
+import { getStatistics } from './view/statisctics-filters.js'
 
-
-let filmsList;
 let films;
+let filmsList;
+let filmsListContainer
+
+
+
 const body = document.querySelector('body');
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
+
+const FILM_CARDS_COUNT = 20;
+const FILM_CARDS_COUNT_PER_STEP = 5;
+const filmCards = new Array(FILM_CARDS_COUNT).fill().map(generateFilmCard);
+console.log('filmCards: ', filmCards);
+let slicedFilmCards = filmCards.slice(0, 5)
+
 
 // Рендер элементов
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-// Рендер списка фильмов
+// Рендер контейнера для списка фильмов
 
-const renderFilmsList = (container, templateFilmsList, templateFilmCard, place) => {
+const renderFilmsContainer = (container, templateFilmsList, place) => {
   container.insertAdjacentHTML(place, templateFilmsList);
-  const filmsListContainer = main.querySelector('.films-list__container');
   films = main.querySelector('.films');
   filmsList = main.querySelector('.films-list');
-  for (let ii = 0; ii < 5; ii++) {
-    filmsListContainer.insertAdjacentHTML(place, templateFilmCard());
-  }
+  filmsListContainer = main.querySelector('.films-list__container');
+
 
   return {
     films,
     filmsList,
+    filmsListContainer
   };
 };
 
-// Рендер списков фильмов с наибольшим числом комментариев и фильмов с самым высоким рейтингом
-
-const renderFilmsListExtra = (container, templateFilmsListExtra, templateFilmCard, name, place) => {
-  container.insertAdjacentHTML(place, templateFilmsListExtra);
-  const filmsListExtra = container.querySelector(`.films-list--${name}`);
-  const filmsListContainerExtra = filmsListExtra.querySelector('.films-list__container');
-  for (let ii = 0; ii < 2; ii++) {
-    filmsListContainerExtra.insertAdjacentHTML(place, templateFilmCard());
-  }
-};
-
 render(header, createUserRank(), 'beforeend');
-render(main, createMenu(), 'beforeend');
+render(main, createMenu(getStatistics(filmCards)), 'beforeend');
 render(main, createFilters(), 'beforeend');
-render(main, createStatistics(), 'beforeend');
-renderFilmsList(main, createFilmsList(), createFilmCard, 'beforeend');
-render(filmsList, createShowMoreButton(), 'beforeend');
-renderFilmsListExtra(films, createTopRatedFilmsList(), createFilmCard, 'top-rated', 'beforeend');
-renderFilmsListExtra(films, createMostCommentedFilmsList(), createFilmCard, 'most-commented', 'beforeend');
-// render(body, createPopup(), 'beforeend');
-console.log(generateFilmCard());
+render(main, createStatistics(getStatistics(filmCards)), 'beforeend');
+renderFilmsContainer(main, createFilmsContainer(), 'beforeend');
+
+// Добавляет карточки фильмов в контейнер
+for (let ii = 0; ii < Math.min(filmCards.length, FILM_CARDS_COUNT_PER_STEP); ii++) {
+  render(filmsListContainer, createFilmCard(filmCards[ii]), 'beforeend')
+}
+
+// Описывает логику допоказа карточек фильмов
+if (filmCards.length > FILM_CARDS_COUNT_PER_STEP) {
+  let renderedFilmCardsCount = FILM_CARDS_COUNT_PER_STEP
+  console.log(renderedFilmCardsCount);
+  render(filmsList, createShowMoreButton(), 'beforeend');
+  const loadMoreButton = filmsList.querySelector('.films-list__show-more');
+
+  loadMoreButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    filmCards
+      .slice(renderedFilmCardsCount, renderedFilmCardsCount + FILM_CARDS_COUNT_PER_STEP)
+      .forEach((filmCard) => render(filmsListContainer, createFilmCard(filmCard), 'beforeend'))
+    renderedFilmCardsCount += FILM_CARDS_COUNT_PER_STEP;
+    console.log(renderedFilmCardsCount)
+    if (renderedFilmCardsCount >= filmCards.length) {
+      loadMoreButton.remove();
+    }
+  })
+
+}
+
+//Сортировка фильмов от наибольшего к меньшему по рейтингу
+filmCards.sort((a, b) => {
+  return (b.rating - a.rating);
+})
+
+
+console.log(filmCards)
+// Добавляет контейнер для фильмов с наибольшbv рейтингом
+render(films, createTopRatedFilmsList(), 'beforeend');
+let topRatedFilmsContainer = films.querySelector('.films-list--top-rated').querySelector('.films-list__container');
+
+//Добавляет фильмы в контейнер с наибольшим рейтингом
+for (let ii = 0; ii < 2; ii++) {
+  render(topRatedFilmsContainer, createFilmCard(filmCards[ii]), 'beforeend')
+}
+
+// Сортировка фильмов от наибольшего к наименьшему по количеству комментариев
+filmCards.sort((a, b) => {
+  return (b.commentsCount - a.commentsCount);
+})
+
+console.log(filmCards);
+
+// Добавляет контейнер для фильмов с наибольшим количеством комментариев
+render(films, createMostCommentedFilmsList(), 'beforeend');
+let mostCommentedFilmsContainer = films.querySelector('.films-list--most-commented').querySelector('.films-list__container');
+
+//Добавляет фильмы в контейнер с наибольшим количеством комментариев
+for (let ii = 0; ii < 2; ii++) {
+  render(mostCommentedFilmsContainer, createFilmCard(filmCards[ii]), 'beforeend');
+}
+
+// Создает попап
+render(body, createPopup(slicedFilmCards[0]), 'beforeend');
+
+// Добавляет комментарии в попап
+let popupCommentsContainer = body.querySelector('.film-details').querySelector('.film-details__comments-list');
+for (let ii = 0; ii < slicedFilmCards[0].commentsList.length; ii++) {
+  console.log(slicedFilmCards[0].commentsList[ii].emoji)
+  render(popupCommentsContainer, createCommentItem(slicedFilmCards[0].commentsList[ii]), 'beforeend')
+}
+console.log(slicedFilmCards[0].commentsList[0].emoji)
 

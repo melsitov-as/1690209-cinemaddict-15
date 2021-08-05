@@ -1,4 +1,4 @@
-import { dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 // Генерирует случайное дробное число
 const getRandomPositiveFloat = (a, b, digits = 1) => {
@@ -83,11 +83,14 @@ const generateDirector = () => {
   return generatedDirector;
 }
 
+// Удаляет последний элемент в массиве
+
+
 // Генерирует фамилии сценаристов
 const screenwritersList = [
-  'Screenwriter - 1',
-  'Screenwriter - 2',
-  'Screenwriter - 3'
+  ' Screenwriter - 1',
+  ' Screenwriter - 2',
+  ' Screenwriter - 3'
 ]
 
 const generateRandomScreenwriter = () => {
@@ -109,11 +112,11 @@ const generateScreenwriters = () => {
 
 // Генерирует фамилии актеров
 const actorsList = [
-  'Actor - 1',
-  'Actor - 2',
-  'Actor - 3',
-  'Actor - 4',
-  'Actor - 5',
+  ' Actor - 1',
+  ' Actor - 2',
+  ' Actor - 3',
+  ' Actor - 4',
+  ' Actor - 5',
 ]
 
 const generateRandomActor = () => {
@@ -132,32 +135,33 @@ const generateActors = () => {
 
   return generatedActorsList;
 };
+// Генерирует дату релиза
+const maxDaysGap = 36500;
+let date;
 
-const generateReleaseDateYear = () => {
-  const maxDaysGap = 36500;
-  const daysGap = getRandomPositiveInteger(-1, -maxDaysGap);
-  console.log(dayjs())
+const getDate = () => {
+  const daysGap = getRandomPositiveInteger(1, maxDaysGap);
+  date = dayjs().add(-daysGap, 'day')
 
+  return date;
 }
 
-// Генерирует год производства
-const generateYear = () => {
-  const generatedYear = getRandomPositiveInteger(1900, 2021);
-  return generatedYear;
-}
 
 // Генерирует продолжительность
 const generateDuration = () => {
-  let generatedDurationHours = getRandomPositiveInteger(0, 2);
-  let generatedDurationMinutes = getRandomPositiveInteger(0, 59);
   let duration = '';
-  if (generatedDurationHours > 0) {
-    duration = generatedDurationHours + 'h' + ' ' + generatedDurationMinutes + 'm';
+  let generatedDurationMinutes = getRandomPositiveInteger(0, 240);
+  if (generatedDurationMinutes < 60) {
+    duration = `${generatedDurationMinutes}m`
   } else {
-    duration = generatedDurationMinutes + 'm';
+    let durationHours = Math.floor(generatedDurationMinutes / 60);
+    let durationMinutes = generatedDurationMinutes % 60;
+    duration = `${durationHours}h ${durationMinutes}m`
   }
-
-  return duration;
+  return {
+    durationInM: generatedDurationMinutes,
+    durationInHM: duration
+  }
 }
 
 // Генерирует страну
@@ -175,16 +179,16 @@ const generateCountry = () => {
 
 // Генерирует жанр
 const genresList = [
-  'Drama',
-  'Mystery',
-  'Comedy',
-  'Cartoon',
-  'Western',
-  'Musical',
+  ' Drama',
+  ' Mystery',
+  ' Comedy',
+  ' Cartoon',
+  ' Western',
+  ' Musical',
 ]
 
 const generateNumberOfGenres = () => {
-  return getRandomPositiveInteger(1, genresList.length - 1);
+  return getRandomPositiveInteger(1, 3);
 }
 
 const generateRandomGenre = () => {
@@ -200,8 +204,19 @@ const generateGenresOfFilm = () => {
       genresOfFilmList.push(newGenre);
     }
   }
-
   return genresOfFilmList
+}
+
+
+const generateGenreTitle = (data) => {
+  let genreTitle;
+  if (data.length === 1) {
+    genreTitle = 'Genre'
+  } else {
+    genreTitle = 'Genres'
+  }
+
+  return genreTitle;
 }
 
 // Генерирует описание
@@ -237,12 +252,22 @@ const generateDescription = () => {
     }
   }
   let description = generatedSentencesList.toString()
-  console.log(description);
   let re = /,/gi;
   description = description.replace(re, '');
-  console.log(description);
 
   return description;
+}
+
+const generateShortDescription = (data) => {
+  let shortDescription;
+  if (data.length > 140) {
+    shortDescription = data.slice(0, 138);
+    shortDescription += '...';
+  } else {
+    shortDescription = data
+  }
+
+  return shortDescription;
 }
 
 // Генерирует возрастной рейтинг
@@ -251,33 +276,100 @@ const generateAgeRating = () => {
   return num + '+';
 }
 
-let commentsList = [];
 
-const generateNumberOfComments = () => {
-  return getRandomPositiveInteger(1, 5);
+// Генерирует комментарии
+const emojiesList = [
+  'smile.png',
+  'sleeping.png',
+  'puke.png',
+  'angry.png'
+]
+
+const authorsList = [
+  'Author - 1',
+  'Author - 2',
+  'Author - 3',
+  'Author - 4',
+  'Author - 5'
+]
+
+const generateCommentsCount = () => {
+  return getRandomPositiveInteger(0, 20);
 }
 
-const generateCommentText = () => {
+const generateCommentTitle = (data) => {
+  if (data === 1) {
+    return 'comment';
+  } else {
+    return 'comments';
+  }
+}
+
+const generateEmoji = () => {
+  return emojiesList[getRandomPositiveInteger(0, emojiesList.length - 1)]
+}
+
+const generateText = () => {
   return sentencesList[getRandomPositiveInteger(0, sentencesList.length - 1)]
 }
 
-const generateComment = (num) => {
+const generateAuthor = () => {
+  return authorsList[getRandomPositiveInteger(0, authorsList.length - 1)]
+}
+
+const generateDate = () => {
+  let commentDate;
+  let maxCommentMinutesGap = 5256000;
+  const commentMinutesGap = getRandomPositiveInteger(0, maxCommentMinutesGap)
+  commentDate = dayjs().add(-commentMinutesGap, 'minutes').format('YYYY/MM/DD HH:mm')
+  return commentDate
+}
+
+const generateComment = () => {
   return {
-    id: num,
-    text: generateCommentText(),
+    emoji: generateEmoji(),
+    text: generateText(),
+    author: generateAuthor(),
+    date: generateDate()
   }
 }
 
-const generateComments = () => {
-  for (let ii = 0; ii < generateNumberOfComments(); ii++) {
-    let comment = generateComment(ii);
-    commentsList.push(comment);
+
+const generateCommentsList = (data) => {
+  let commentsOfFilm = [];
+  for (let ii = 0; ii < data; ii++) {
+    commentsOfFilm.push(generateComment())
   }
-  console.log(commentsList);
-  return commentsList;
+  return commentsOfFilm;
+}
+
+// Генерирует булево значение
+const getBoolean = () => {
+  return Boolean(getRandomPositiveInteger(0, 1));
+}
+
+const getDateWatched = (data) => {
+  let dateWatched;
+  let maxDaysGap = 365;
+  if (!data) {
+    dateWatched = false;
+  } else {
+    let daysGap = getRandomPositiveInteger(0, maxDaysGap);
+    dateWatched = dayjs().add(-daysGap, 'days')
+  }
+  return dateWatched;
 }
 
 const generateFilmCard = () => {
+  getDate();
+  const genresOfFilmList = generateGenresOfFilm();
+  const genreTitle = generateGenreTitle(genresOfFilmList);
+  const description = generateDescription();
+  const shortDescription = generateShortDescription(description);
+  const duration = generateDuration();
+  const isWatched = getBoolean();
+  const dateWatched = getDateWatched(isWatched);
+  const commentsCount = generateCommentsCount();
   return {
     image: generateImage(),
     title: generateTitle(),
@@ -286,18 +378,26 @@ const generateFilmCard = () => {
     director: generateDirector(),
     screenwriters: generateScreenwriters(),
     actors: generateActors(),
-    releaseDateYear: generateReleaseDateYear(),
-    year: generateYear(),
-    duration: generateDuration(),
+    releaseDateYear: date.format('DD MMMM YYYY'),
+    year: date.format('YYYY'),
+    durationInM: duration.durationInM,
+    durationInHM: duration.durationInHM,
     country: generateCountry(),
-    genre: generateGenresOfFilm(),
-    description: generateDescription(),
+    genre: genresOfFilmList,
+    genreTitle: genreTitle,
+    description: description,
+    shortDescription: shortDescription,
     ageRating: generateAgeRating(),
-    comments: generateComments(),
-    isInWatchlist: false,
-    isInHistory: false,
-    isInFavorites: false,
+    isInWatchlist: getBoolean(),
+    isWatched: isWatched,
+    dateWatched: dateWatched,
+    isInFavorites: getBoolean(),
+    commentsCount: commentsCount,
+    commentsTitle: generateCommentTitle(commentsCount),
+    commentsList: generateCommentsList(commentsCount),
   }
 }
 
-export { generateFilmCard};
+
+
+export { generateFilmCard };
