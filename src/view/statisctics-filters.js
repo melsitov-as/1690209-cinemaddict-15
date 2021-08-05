@@ -1,26 +1,22 @@
 // Статистика
 // Собирает данные об общей длительности
 // Фильтр inWatchList
-const getFilterInWatchlist = (filmCardsData) => {
-  return filmCardsData.filter((filmCard) => filmCard.isInWatchlist).length;
-}
+const getFilterInWatchlist = (filmCardsData) => filmCardsData.filter((filmCard) => filmCard.isInWatchlist).length;
+
 
 // Фильтр watched
-const getFilterWatched = (filmCardsData) => {
-  return filmCardsData.filter((filmCard) => filmCard.isWatched).length;
-}
+const getFilterWatched = (filmCardsData) => filmCardsData.filter((filmCard) => filmCard.isWatched).length;
+
 
 //Фильтр in favorites
-const getFilterInFavorites = (filmCardsData) => {
-  return filmCardsData.filter((filmCard) => filmCard.isInFavorites).length;
-}
+const getFilterInFavorites = (filmCardsData) => filmCardsData.filter((filmCard) => filmCard.isInFavorites).length;
 
 // Общая длительность просмотренных фильмов
 const getTotalDuration = (filmCardsData) => {
   let totalDurationInMinutes = 0;
   let totalDurationH = 0;
   let totalDurationM = 0;
-  let watchedFilms = getFilterWatched(filmCardsData)
+  const watchedFilms = getFilterWatched(filmCardsData);
   for (let ii = 0; ii < watchedFilms; ii++) {
     totalDurationInMinutes += filmCardsData[ii].durationInM;
   }
@@ -30,8 +26,8 @@ const getTotalDuration = (filmCardsData) => {
   return {
     totalDurationInH: totalDurationH,
     totalDurationInM: totalDurationM,
-  }
-}
+  };
+};
 
 // Генерирует top genre
 const getTopGenre = (filmCardsData) => {
@@ -42,25 +38,27 @@ const getTopGenre = (filmCardsData) => {
   let westernCount = 0;
   let mysicalCount = 0;
   let greatestNum;
-  let allGenresList = [];
+  const allGenresList = [];
   for (let ii = 0; ii < filmCardsData.length; ii++) {
     for(let jj = 0; jj < filmCardsData[ii].genre.length; jj++) {
-      allGenresList.push(filmCardsData[ii].genre[jj])
+      allGenresList.push(filmCardsData[ii].genre[jj]);
     }
   }
   allGenresList.forEach((genre) => {
     if (genre === ' Drama') {
-      dramaCount++
+      dramaCount++;
     } else if (genre === ' Mystery') {
-      mysteryCount++
+      mysteryCount++;
     } else if (genre === ' Comedy') {
-      comedyCount++
+      comedyCount++;
+    } else if (genre === 'Cartoon') {
+      cartoonCount++;
     } else if (genre === ' Western') {
-      westernCount++
+      westernCount++;
     } else {
-      mysicalCount++
+      mysicalCount++;
     }
-  })
+  });
 
   greatestNum = dramaCount;
   if (mysteryCount > greatestNum) {
@@ -76,23 +74,23 @@ const getTopGenre = (filmCardsData) => {
     greatestNum = westernCount;
   }
   if (mysicalCount > greatestNum) {
-    greatestNum = mysicalCount
+    greatestNum = mysicalCount;
   }
 
   if (greatestNum === dramaCount) {
-    return 'Drama'
+    return 'Drama';
   } else if (greatestNum === mysteryCount) {
-    return 'Mystery'
+    return 'Mystery';
   } else if (greatestNum === comedyCount) {
-    return 'Comedy'
+    return 'Comedy';
   } else if (greatestNum === cartoonCount) {
-    return 'Cartoon'
+    return 'Cartoon';
   } else if (greatestNum === westernCount) {
-    return 'Western'
+    return 'Western';
   } else {
-    return 'Mysical'
+    return 'Mysical';
   }
-}
+};
 
 const getStatistics = (filmCardsData) => {
   const totalDuration = getTotalDuration(filmCardsData);
@@ -105,7 +103,7 @@ const getStatistics = (filmCardsData) => {
     inHistoryCount: getFilterWatched(filmCardsData),
     inFavoritesCount: getFilterInFavorites(filmCardsData),
     topGenre: getTopGenre(filmCardsData),
-  }
-}
+  };
+};
 
 export { getStatistics };

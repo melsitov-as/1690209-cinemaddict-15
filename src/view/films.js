@@ -11,8 +11,8 @@ const createFilmsContainer = () =>
 
 // Создает карточку фильма
 
-const createFilmCard = (filmCardData) => {
-  return `<article class="film-card">
+const createFilmCard = (filmCardData) =>
+  `<article class="film-card">
     <h3 class="film-card__title">${filmCardData.title}</h3>
     <p class="film-card__rating">${filmCardData.rating}</p>
     <p class="film-card__info">
@@ -28,8 +28,7 @@ const createFilmCard = (filmCardData) => {
       <button class="film-card__controls-item film-card__controls-item--mark-as-watched film-card__controls-item--active" type="button" title="Mark as watched">Mark as watched</button>
       <button class="film-card__controls-item film-card__controls-item--favorite film-card__controls-item--active" type="button" title="Mark as favorite">Mark as favorite</button>
     </div>
-  </article>`
-};
+  </article>`;
 
 // Создает список фильмов с наибольшим рейтингом
 

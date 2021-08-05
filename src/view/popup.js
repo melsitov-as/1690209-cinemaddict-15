@@ -112,7 +112,7 @@ const createPopup = (filmCardData) =>
 </section>`;
 
 const createCommentItem = (filmCardsData) =>
-`<li class="film-details__comment">
+  `<li class="film-details__comment">
   <span class="film-details__comment-emoji">
   <img src="./images/emoji/${filmCardsData.emoji}" width="55" height="55" alt="emoji-sleeping">
   </span>
@@ -124,6 +124,6 @@ const createCommentItem = (filmCardsData) =>
       <button class="film-details__comment-delete">Delete</button>
       </p>
       </div>
-  </li>`
+  </li>`;
 
 export { createPopup, createCommentItem };
