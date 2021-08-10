@@ -26,27 +26,16 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-// Рендер контейнера для списка фильмов
-
-const renderFilmsContainer = (container, templateFilmsList, place) => {
-  container.insertAdjacentHTML(place, templateFilmsList);
-  films = main.querySelector('.films');
-  filmsList = main.querySelector('.films-list');
-  filmsListContainer = main.querySelector('.films-list__container');
-
-
-  return {
-    films,
-    filmsList,
-    filmsListContainer,
-  };
-};
 
 render(header, createUserRank(), 'beforeend');
 render(main, createMenu(getStatistics(filmCards)), 'beforeend');
 render(main, createFilters(), 'beforeend');
 render(main, createStatistics(getStatistics(filmCards)), 'beforeend');
-renderFilmsContainer(main, createFilmsContainer(), 'beforeend');
+render(main, createFilmsContainer(), 'beforeend');
+
+films = main.querySelector('.films')
+filmsList = main.querySelector('.films-list');
+filmsListContainer = main.querySelector('.films-list__container');
 
 // Добавляет карточки фильмов в контейнер
 for (let ii = 0; ii < Math.min(filmCards.length, FILM_CARDS_COUNT_PER_STEP); ii++) {
@@ -97,11 +86,12 @@ for (let ii = 0; ii < 2; ii++) {
 }
 
 // Создает попап
-render(body, createPopup(slicedFilmCards[0]), 'beforeend');
+// render(body, createPopup(slicedFilmCards[0]), 'beforeend');
 
 // Добавляет комментарии в попап
-const popupCommentsContainer = body.querySelector('.film-details').querySelector('.film-details__comments-list');
-for (let ii = 0; ii < slicedFilmCards[0].commentsList.length; ii++) {
-  render(popupCommentsContainer, createCommentItem(slicedFilmCards[0].commentsList[ii]), 'beforeend');
-}
+// const popupCommentsContainer = body.querySelector('.film-details').querySelector('.film-details__comments-list');
+// for (let ii = 0; ii < slicedFilmCards[0].commentsList.length; ii++) {
+//   render(popupCommentsContainer, createCommentItem(slicedFilmCards[0].commentsList[ii]), 'beforeend');
+// }
+
 

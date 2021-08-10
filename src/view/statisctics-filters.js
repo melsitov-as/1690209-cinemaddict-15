@@ -13,21 +13,15 @@ const getFilterInFavorites = (filmCardsData) => filmCardsData.filter((filmCard) 
 
 // Общая длительность просмотренных фильмов
 const getTotalDuration = (filmCardsData) => {
-  let totalDurationInMinutes = 0;
-  let totalDurationH = 0;
-  let totalDurationM = 0;
+  let totalDuration = 0;
   const watchedFilms = getFilterWatched(filmCardsData);
   for (let ii = 0; ii < watchedFilms; ii++) {
-    totalDurationInMinutes += filmCardsData[ii].durationInM;
+    totalDuration += filmCardsData[ii].totalDuration;
   }
-  totalDurationH = Math.floor(totalDurationInMinutes / 60);
-  totalDurationM = totalDurationInMinutes % 60;
 
-  return {
-    totalDurationInH: totalDurationH,
-    totalDurationInM: totalDurationM,
-  };
+  return totalDuration;
 };
+
 
 // Генерирует top genre
 const getTopGenre = (filmCardsData) => {
@@ -93,11 +87,8 @@ const getTopGenre = (filmCardsData) => {
 };
 
 const getStatistics = (filmCardsData) => {
-  const totalDuration = getTotalDuration(filmCardsData);
-
   return {
-    totalDurationInH: totalDuration.totalDurationInH,
-    totalDurationInM: totalDuration.totalDurationInM,
+    totalDuration: getTotalDuration(filmCardsData),
     all: filmCardsData.length,
     inWatchlistCount: getFilterInWatchlist(filmCardsData),
     inHistoryCount: getFilterWatched(filmCardsData),

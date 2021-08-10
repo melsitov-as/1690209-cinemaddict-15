@@ -22,8 +22,10 @@ const createFilters = () =>
 
 // Создает статистику
 
-const createStatistics = (statisticsData) =>
-  `<section class="statistic">
+const createStatistics = (statisticsData) => {
+  const durationInH = Math.floor(statisticsData.totalDuration / 60);
+  const durationInM = statisticsData.totalDuration % 60;
+  return `<section class="statistic">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
@@ -56,7 +58,7 @@ const createStatistics = (statisticsData) =>
     </li>
     <li class="statistic__text-item">
       <h4 class="statistic__item-title">Total duration</h4>
-      <p class="statistic__item-text">${statisticsData.totalDurationInH}<span class="statistic__item-description">h</span> ${statisticsData.totalDurationInM} <span class="statistic__item-description">m</span></p>
+      <p class="statistic__item-text">${durationInH}<span class="statistic__item-description">h</span> ${durationInM} <span class="statistic__item-description">m</span></p>
     </li>
     <li class="statistic__text-item">
       <h4 class="statistic__item-title">Top genre</h4>
@@ -69,5 +71,6 @@ const createStatistics = (statisticsData) =>
   </div>
 
   </section>`;
+}
 
 export {createMenu, createFilters, createStatistics};

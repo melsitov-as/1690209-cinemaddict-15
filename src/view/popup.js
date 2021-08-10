@@ -1,7 +1,10 @@
+import { getDuration } from './utils.js';
+
 // Создает попап
 
-const createPopup = (filmCardData) =>
-  `<section class="film-details">
+const createPopup = (filmCardData) => {
+const durationInHM = getDuration(filmCardData.totalDuration);
+return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
       <div class="film-details__close">
@@ -45,7 +48,7 @@ const createPopup = (filmCardData) =>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${filmCardData.durationInHM}</td>
+              <td class="film-details__cell">${durationInHM}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -110,6 +113,7 @@ const createPopup = (filmCardData) =>
     </div>
   </form>
 </section>`;
+}
 
 const createCommentItem = (filmCardsData) =>
   `<li class="film-details__comment">
