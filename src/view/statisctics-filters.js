@@ -2,15 +2,15 @@
 // Собирает данные об общей длительности
 // Класс Фильтры
 class Filters {
-  static getFilterInWatchList(filmCardsData) {
+  getFilterInWatchList(filmCardsData) {
     return filmCardsData.filter((filmCard) => filmCard.isInWatchlist).length;
   }
 
-  static getFilterWatched(filmCardsData) {
+  getFilterWatched(filmCardsData) {
     return filmCardsData.filter((filmCard) => filmCard.isWatched).length;
   }
 
-  static getFilterInFavorites(filmCardsData) {
+  getFilterInFavorites(filmCardsData) {
     return filmCardsData.filter((filmCard) => filmCard.isInFavorites).length;
   }
 }
@@ -23,7 +23,7 @@ class TotalDuration {
     this.watchedFilms = Filters.getFilterWatched(filmCardsData);
   }
 
-  static getTotalDuration(filmCardsData) {
+  getTotalDuration(filmCardsData) {
     for (let ii = 0; ii < this.watchedFilms; ii++) {
       this.totalDuration += filmCardsData[ii].totalDuration;
     }

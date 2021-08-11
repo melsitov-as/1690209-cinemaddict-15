@@ -3,7 +3,7 @@ import { createFilmsContainer, createFilmCard, createTopRatedFilmsList, createMo
 import SiteUserRank from './view/user-rank.js';
 import { createShowMoreButton } from './view/show-more-button.js';
 import { createPopup, createCommentItem} from './view/popup.js';
-import { generateFilmCard } from './mock/film-card-mock.js';
+import FilmCard  from './mock/film-card-mock.js';
 import SiteStatistics from './view/statisctics-filters.js';
 import { renderTemplate, renderElement, RenderPosition } from './view/utils.js';
 
@@ -16,13 +16,16 @@ const body = document.querySelector('body');
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 
+
+const newFilmCard = new FilmCard();
+console.log(newFilmCard);
 const FILM_CARDS_COUNT = 20;
-const FILM_CARDS_COUNT_PER_STEP = 5;
-const filmCards = new Array(FILM_CARDS_COUNT).fill().map(generateFilmCard);
-const slicedFilmCards = filmCards.slice(0, 5);
+// const FILM_CARDS_COUNT_PER_STEP = 5;
+const filmCards = new Array(FILM_CARDS_COUNT).fill().map(new FilmCard());
+// const slicedFilmCards = filmCards.slice(0, 5);
 
-
-renderTemplate(header, new SiteUserRank().getElement(), RenderPosition.BEFOREEND);
+console.log(new SiteUserRank().getElement())
+renderElement(header, new SiteUserRank().getElement(), RenderPosition.BEFOREEND);
 // renderTemplate(main, createMenu(getStatistics(filmCards)), 'beforeend');
 // renderTemplate(main, createFilters(), 'beforeend');
 // renderTemplate(main, createStatistics(getStatistics(filmCards)), 'beforeend');
