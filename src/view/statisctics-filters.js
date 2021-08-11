@@ -1,15 +1,46 @@
 // Статистика
 // Собирает данные об общей длительности
+// Класс Фильтры
+class Filters {
+  static getFilterInWatchList(filmCardsData) {
+    return filmCardsData.filter((filmCard) => filmCard.isInWatchlist).length;
+  }
+
+  static getFilterWatched(filmCardsData) {
+    return filmCardsData.filter((filmCard) => filmCard.isWatched).length;
+  }
+
+  static getFilterInFavorites(filmCardsData) {
+    return filmCardsData.filter((filmCard) => filmCard.isInFavorites).length;
+  }
+}
+
+
+// Класс Общая продолжительность просмотренных фильмов
+class TotalDuration {
+  constructor() {
+    this.totalDuration = 0;
+    this.watchedFilms = Filters.getFilterWatched(filmCardsData);
+  }
+
+  static getTotalDuration(filmCardsData) {
+    for (let ii = 0; ii < this.watchedFilms; ii++) {
+      this.totalDuration += filmCardsData[ii].totalDuration;
+    }
+  }
+}
+
+
 // Фильтр inWatchList
-const getFilterInWatchlist = (filmCardsData) => filmCardsData.filter((filmCard) => filmCard.isInWatchlist).length;
+// const getFilterInWatchlist = (filmCardsData) => filmCardsData.filter((filmCard) => filmCard.isInWatchlist).length;
 
 
 // Фильтр watched
-const getFilterWatched = (filmCardsData) => filmCardsData.filter((filmCard) => filmCard.isWatched).length;
+// const getFilterWatched = (filmCardsData) => filmCardsData.filter((filmCard) => filmCard.isWatched).length;
 
 
 //Фильтр in favorites
-const getFilterInFavorites = (filmCardsData) => filmCardsData.filter((filmCard) => filmCard.isInFavorites).length;
+// const getFilterInFavorites = (filmCardsData) => filmCardsData.filter((filmCard) => filmCard.isInFavorites).length;
 
 // Общая длительность просмотренных фильмов
 const getTotalDuration = (filmCardsData) => {
@@ -86,15 +117,18 @@ const getTopGenre = (filmCardsData) => {
   }
 };
 
-const getStatistics = (filmCardsData) => {
-  return {
-    totalDuration: getTotalDuration(filmCardsData),
-    all: filmCardsData.length,
-    inWatchlistCount: getFilterInWatchlist(filmCardsData),
-    inHistoryCount: getFilterWatched(filmCardsData),
-    inFavoritesCount: getFilterInFavorites(filmCardsData),
-    topGenre: getTopGenre(filmCardsData),
-  };
-};
+class SiteStatistics {
+  getStatistics(filmCardsData) {
+    return {
+      totalDuration: getTotalDuration(filmCardsData),
+      all: filmCardsData.length,
+      inWatchlistCount: getFilterInWatchlist(filmCardsData),
+      inHistoryCount: getFilterWatched(filmCardsData),
+      inFavoritesCount: getFilterInFavorites(filmCardsData),
+      topGenre: getTopGenre(filmCardsData),
+    };
+  }
+}
 
-export { getStatistics };
+
+export { SiteStatistics };

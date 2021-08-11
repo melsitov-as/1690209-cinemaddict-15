@@ -1,6 +1,9 @@
+import { createElement } from "./utils.js";
+
+
 // Создает меню
 
-const createMenu = (statisticsData) =>
+const createMenuTemplate = (statisticsData) =>
   `<nav class="main-navigation">
       <div class="main-navigation__items">
         <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
@@ -10,6 +13,30 @@ const createMenu = (statisticsData) =>
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`;
+
+
+class SiteMenu {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMenuTemplate(statisticsData);
+  }
+
+  getElement() {
+    if (!this.element) {
+      this._element = createElement(this.getElement());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+};
 
 // Создает фильтры
 
@@ -73,4 +100,4 @@ const createStatistics = (statisticsData) => {
   </section>`;
 }
 
-export {createMenu, createFilters, createStatistics};
+export { SiteMenu };

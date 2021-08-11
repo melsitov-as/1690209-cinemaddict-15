@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { getRandomPositiveFloat, getRandomPositiveInteger } from '../view/utils.js';
 
 const imagesList = [
   'popeye-meets-sinbad.png',
@@ -96,56 +97,85 @@ const authorsList = [
   'Author - 5',
 ];
 
-// Генерирует случайное дробное число
-const getRandomPositiveFloat = (a, b, digits = 1) => {
-  const lower = Math.min(Math.abs(a), Math.abs(b));
-  const upper = Math.max(Math.abs(a), Math.abs(b));
-  const result = Math.random() * (upper - lower) + lower;
-  return result.toFixed(digits);
+// Класс Генерирует случайный элемент в массиве
+class RandomItem {
+  getRandomItem(data) {
+    return data[getRandomPositiveInteger(0, data.length - 1)];
+  }
+}
+
+// Класс Генерирует случайный массив
+class RandomArray {
+  constructor() {
+    this.count = 0;
+    this.shuffeledArray = [];
+  }
+
+  shuffleArray(a, b) {
+    return Math.random() - 0.5
+  }
+
+  getRandomArray(arr) {
+    this.count = getRandomPositiveInteger(1, arr.length - 1);
+    this.shuffeledArray = arr.sort(this.shuffleArray);
+    return this.shuffeledArray.slice(0, this.count)
+  }
 };
 
-// Генерирует случайное целое число
-const getRandomPositiveInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
+// Класс Генерирует рейтинг
+class Rating {
+  generateRating() {
+    return getRandomPositiveFloat(1, 10, 1)
+  }
 };
+
+// Класс Генерирует дату релиза
+class ReleaseDate {
+  constructor() {
+    this.maxDaysGap = 36500;
+  }
+
+  getDate() {
+    let date = dayjs();
+    const daysGap = getRandomPositiveInteger(1, this.maxDaysGap);
+    let filmDate = date.add(-daysGap, 'day');
+    return filmDate;
+  }
+}
+
+// Класс Генерирует Жанр или Жанры
+class genreTitle {
+
+}
+
+
 
 // Генерирует случайный элемент в массиве
-const getRandomItem = (data) => data[getRandomPositiveInteger(0, data.length - 1)];
+// const getRandomItem = (data) => data[getRandomPositiveInteger(0, data.length - 1)];
 
 // Генерирует случайный массив случайной длины
-const shuffleArray = (a, b) => {
-  return Math.random() - 0.5
-}
+// const shuffleArray = (a, b) => {
+//   return Math.random() - 0.5
+// }
 
-// Получить случайный массив
-const getRandomArray = (arr) => {
-  const count = getRandomPositiveInteger(1, arr.length - 1);
-  const shuffeledArray = arr.sort(shuffleArray);
-  return shuffeledArray.slice(0, count);
-}
-
-
-// Генерирует рейтинг
-const generateRating = () => {
-  const generatedRating = getRandomPositiveFloat(1, 10, 1);
-  return generatedRating;
-};
-
+// // Получить случайный массив
+// const getRandomArray = (arr) => {
+//   const count = getRandomPositiveInteger(1, arr.length - 1);
+//   const shuffeledArray = arr.sort(shuffleArray);
+//   return shuffeledArray.slice(0, count);
+// }
 
 
 // Генерирует дату релиза
-const maxDaysGap = 36500;
+// const maxDaysGap = 36500;
 
-const getDate = () => {
-  let date = dayjs();
-  const daysGap = getRandomPositiveInteger(1, maxDaysGap);
-  let filmDate = date.add(-daysGap, 'day');
+// const getDate = () => {
+//   let date = dayjs();
+//   const daysGap = getRandomPositiveInteger(1, maxDaysGap);
+//   let filmDate = date.add(-daysGap, 'day');
 
-  return filmDate;
-};
+//   return filmDate;
+// };
 
 // Генерирует жанр или жанры
 
@@ -240,39 +270,38 @@ const getDateWatched = (data) => {
 };
 
 const generateFilmCard = () => {
-  const filmDate = getDate();
-  const genre = getRandomArray(genresList);
-  const genreTitle = generateGenreTitle(genre);
-  const description = generateDescription();
-  const shortDescription = generateShortDescription(description);
-  const isWatched = getBoolean();
-  const dateWatched = getDateWatched(isWatched);
-  const commentsCount = generateCommentsCount();
-  return {
-    image: getRandomItem(imagesList),
-    title: getRandomItem(titlesList),
-    originalTitle: getRandomItem(originalTitlesList),
-    rating: generateRating(),
-    director: getRandomItem(directorsList),
-    screenwriters: getRandomArray(screenwritersList),
-    actors: getRandomArray(actorsList),
-    releaseDateYear: filmDate.format('DD MMMM YYYY'),
-    year: filmDate.format('YYYY'),
-    totalDuration: getRandomPositiveInteger(0, 240),
-    country: getRandomItem(countriesList),
-    genre: genre,
-    genreTitle: genreTitle,
-    description: description,
-    shortDescription: shortDescription,
-    ageRating: generateAgeRating(),
-    isInWatchlist: getBoolean(),
-    isWatched: isWatched,
-    dateWatched: dateWatched,
-    isInFavorites: getBoolean(),
-    commentsCount: commentsCount,
-    commentsTitle: generateCommentTitle(commentsCount),
-    commentsList: generateCommentsList(commentsCount),
-  };
+  const genres = new RandomArray().getRandomArray(genresList);
+  // const genreTitle = generateGenreTitle(genre);
+  // const description = generateDescription();
+  // const shortDescription = generateShortDescription(description);
+  // const isWatched = getBoolean();
+  // const dateWatched = getDateWatched(isWatched);
+  // const commentsCount = generateCommentsCount();
+  // return {
+  //   image: getRandomItem(imagesList),
+  //   title: getRandomItem(titlesList),
+  //   originalTitle: getRandomItem(originalTitlesList),
+  //   rating: generateRating(),
+  //   director: getRandomItem(directorsList),
+  //   screenwriters: getRandomArray(screenwritersList),
+  //   actors: getRandomArray(actorsList),
+  //   releaseDateYear: filmDate.format('DD MMMM YYYY'),
+  //   year: filmDate.format('YYYY'),
+  //   totalDuration: getRandomPositiveInteger(0, 240),
+  //   country: getRandomItem(countriesList),
+  //   genre: genre,
+  //   genreTitle: genreTitle,
+  //   description: description,
+  //   shortDescription: shortDescription,
+  //   ageRating: generateAgeRating(),
+  //   isInWatchlist: getBoolean(),
+  //   isWatched: isWatched,
+  //   dateWatched: dateWatched,
+  //   isInFavorites: getBoolean(),
+  //   commentsCount: commentsCount,
+  //   commentsTitle: generateCommentTitle(commentsCount),
+  //   commentsList: generateCommentsList(commentsCount),
+  // };
 };
 
 export { generateFilmCard };
