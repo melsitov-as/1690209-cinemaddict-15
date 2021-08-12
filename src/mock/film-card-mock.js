@@ -390,7 +390,7 @@ export default class FilmCard {
     this.image = new RandomItem().getRandomItem(imagesList);
     this.title = new RandomItem().getRandomItem(titlesList);
     this.originalTitle = new RandomItem().getRandomItem(originalTitlesList);
-    this.rating = new Rating().getRating();
+    this.rating = Number(new Rating().getRating());
     this.director = new RandomItem().getRandomItem(directorsList);
     this.screeenWriters = new RandomItem().getRandomItem(screenwritersList);
     this.actors = new RandomItem().getRandomItem(actorsList);

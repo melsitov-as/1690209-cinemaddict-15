@@ -1,17 +1,6 @@
-import { getDuration } from './utils.js'
-
-// Создает список фильмов
-const createFilmsContainer = () =>
-  `<section class="films">
-    <section class="films-list">
-      <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
-      <div class="films-list__container">
-      </div>
-    </section>
-  </section>`;
+import { createElement, getDuration } from "./utils.js";
 
 // Создает карточку фильма
-// date.format('YYYY')
 const createFilmCard = (filmCardData) => {
   const durationInHM = getDuration(filmCardData.totalDuration);
   return `<article class="film-card">
@@ -33,22 +22,27 @@ const createFilmCard = (filmCardData) => {
   </article>`;
 }
 
-// Создает список фильмов с наибольшим рейтингом
+export default class SiteFilmCard {
+  contructor() {
+    this._element = null;
+  }
 
-const createTopRatedFilmsList = () =>
-  `<section class="films-list films-list--extra films-list--top-rated">
-    <h2 class="films-list__title">Top rated</h2>
-    <div class="films-list__container">
-    </div>
-  </section>`;
+  getTemplate(filmCardData) {
+    return createFilmCard(filmCardData);
+  }
 
-// Создает список фильмов с наибольшим числом комментариев
+  getElement(filmCardData) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(filmCardData));
+    }
 
-const createMostCommentedFilmsList = () =>
-  `<section class="films-list films-list--extra films-list--most-commented"">
-    <h2 class="films-list__title">Most commented</h2>
-    <div class="films-list__container">
-    </div>
-    </section>`;
+    return this._element
+  }
 
-export {createFilmsContainer, createFilmCard, createTopRatedFilmsList, createMostCommentedFilmsList};
+  removeElement() {
+    this._element = null;
+  }
+}
+
+
+
