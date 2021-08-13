@@ -1,4 +1,4 @@
-import { createElement } from "./utils.js";
+import { createElement } from './utils.js';
 
 // Создает кнопку "Show more"
 const createShowMoreButton = () =>
@@ -7,11 +7,11 @@ const createShowMoreButton = () =>
 export default class SiteShowMoreButton {
   constructor() {
     this._element = null;
-  };
+  }
 
   getTemplate() {
     return createShowMoreButton();
-  };
+  }
 
   getElement() {
     if (!this._element) {
@@ -19,9 +19,9 @@ export default class SiteShowMoreButton {
     }
 
     return this._element;
-  };
+  }
 
   removeElement() {
     this._element = null;
-  };
+  }
 }

@@ -1,4 +1,4 @@
-import { createElement } from "./utils.js";
+import { createElement } from './utils.js';
 
 // Создает список фильмов с наибольшим рейтингом
 
@@ -20,10 +20,10 @@ export default class SiteTopRatedFilmsList {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate())
+      this._element = createElement(this.getTemplate());
     }
 
-  return this._element;
+    return this._element;
   }
 
   removeElement() {

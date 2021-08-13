@@ -1,4 +1,4 @@
-import { createElement } from "./utils.js";
+import { createElement } from './utils.js';
 
 // Создает статистику
 
@@ -51,20 +51,21 @@ const createStatistics = (statisticsData) => {
   </div>
 
   </section>`;
-}
+};
 
 export default class SiteStatisticsMenu {
-  constructor() {
+  constructor(statisticsData) {
+    this._statisticsData = statisticsData;
     this._element = null;
   }
 
-  getTemplate(statisticsData) {
-    return createStatistics(statisticsData);
+  getTemplate() {
+    return createStatistics(this._statisticsData);
   }
 
-  getElement(statisticsData) {
+  getElement() {
     if (!this.element) {
-      this._element = createElement(this.getTemplate(statisticsData));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

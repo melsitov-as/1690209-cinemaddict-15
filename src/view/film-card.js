@@ -1,4 +1,4 @@
-import { createElement, getDuration } from "./utils.js";
+import { createElement, getDuration } from './utils.js';
 
 // Создает карточку фильма
 const createFilmCard = (filmCardData) => {
@@ -20,29 +20,27 @@ const createFilmCard = (filmCardData) => {
       <button class="film-card__controls-item film-card__controls-item--favorite film-card__controls-item--active" type="button" title="Mark as favorite">Mark as favorite</button>
     </div>
   </article>`;
-}
+};
 
 export default class SiteFilmCard {
-  contructor() {
+  constructor(filmCardData) {
+    this._filmCardData = filmCardData;
     this._element = null;
   }
 
-  getTemplate(filmCardData) {
-    return createFilmCard(filmCardData);
+  getTemplate() {
+    return createFilmCard(this._filmCardData);
   }
 
-  getElement(filmCardData) {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate(filmCardData));
+      this._element = createElement(this.getTemplate());
     }
 
-    return this._element
+    return this._element;
   }
 
   removeElement() {
     this._element = null;
   }
 }
-
-
-

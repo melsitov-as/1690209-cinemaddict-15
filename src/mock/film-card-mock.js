@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { getRandomPositiveFloat, getRandomPositiveInteger } from '../view/utils.js';
 
-const imagesList = [
+const IMAGES_LIST = [
   'popeye-meets-sinbad.png',
   'sagebrush-trail.jpg',
   'the-dance-of-life.jpg',
@@ -11,7 +11,7 @@ const imagesList = [
   'made-for-each-other.png',
 ];
 
-const titlesList = [
+const TITLES_LIST = [
   'Popeye the Sailor Meets Sindbad the Sailor',
   'Sagebrush Trail',
   'The Dance of Life',
@@ -21,7 +21,7 @@ const titlesList = [
   'Made for Each Other',
 ];
 
-const originalTitlesList = [
+const ORIGINAL_TITLES_LIST = [
   'Original Title - 1',
   'Original Title - 2',
   'Original Title - 3',
@@ -29,7 +29,7 @@ const originalTitlesList = [
   'Original Title - 5',
 ];
 
-const directorsList = [
+const DIRECTORS_LIST = [
   'Director - 1',
   'Director - 2',
   'Director - 3',
@@ -37,13 +37,13 @@ const directorsList = [
   'Director - 5',
 ];
 
-const screenwritersList = [
+const SCREENWRITERS_LIST = [
   ' Screenwriter - 1',
   ' Screenwriter - 2',
   ' Screenwriter - 3',
 ];
 
-const actorsList = [
+const ACTORS_LIST = [
   ' Actor - 1',
   ' Actor - 2',
   ' Actor - 3',
@@ -51,7 +51,7 @@ const actorsList = [
   ' Actor - 5',
 ];
 
-const countriesList = [
+const COUNTRIES_LIST = [
   'Country - 1',
   'Country - 2',
   'Country - 3',
@@ -59,7 +59,7 @@ const countriesList = [
   'Country - 5',
 ];
 
-const genresList = [
+const GENRES_LIST = [
   ' Drama',
   ' Mystery',
   ' Comedy',
@@ -68,7 +68,7 @@ const genresList = [
   ' Musical',
 ];
 
-const sentencesList = [
+const SENTENCES_LIST = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
   'Cras aliquet varius magna, non porta ligula feugiat eget. ',
   'Fusce tristique felis at fermentum pharetra. ',
@@ -82,14 +82,14 @@ const sentencesList = [
   'In rutrum ac purus sit amet tempus. ',
 ];
 
-const emojiesList = [
+const EMOJIES_LIST = [
   'smile.png',
   'sleeping.png',
   'puke.png',
   'angry.png',
 ];
 
-const authorsList = [
+const AUTHORS_LIST = [
   'Author - 1',
   'Author - 2',
   'Author - 3',
@@ -111,23 +111,23 @@ class RandomArray {
     this.shuffeledArray = [];
   }
 
-  shuffleArray(a, b) {
-    return Math.random() - 0.5
+  shuffleArray() {
+    return Math.random() - 0.5;
   }
 
   getRandomArray(arr) {
     this.count = getRandomPositiveInteger(1, arr.length - 1);
     this.shuffeledArray = arr.sort(this.shuffleArray);
-    return this.shuffeledArray.slice(0, this.count)
+    return this.shuffeledArray.slice(0, this.count);
   }
-};
+}
 
 // Класс Генерирует рейтинг
 class Rating {
   getRating() {
-    return getRandomPositiveFloat(1, 10, 1)
+    return getRandomPositiveFloat(1, 10, 1);
   }
-};
+}
 
 // Класс Генерирует дату релиза
 class ReleaseDate {
@@ -136,9 +136,9 @@ class ReleaseDate {
   }
 
   getDate() {
-    let date = dayjs();
+    const date = dayjs();
     const daysGap = getRandomPositiveInteger(1, this.maxDaysGap);
-    let filmDate = date.add(-daysGap, 'day');
+    const filmDate = date.add(-daysGap, 'day');
     return filmDate;
   }
 }
@@ -163,7 +163,7 @@ class GenreTitle {
 // Класс Генерирует описание
 class Description {
   constructor() {
-    this.descriprionsArray = new RandomArray().getRandomArray(sentencesList);
+    this.descriprionsArray = new RandomArray().getRandomArray(SENTENCES_LIST);
   }
 
   getDescription() {
@@ -198,7 +198,6 @@ class AgeRating {
 }
 
 // Комментарии
-// const generateCommentsCount = () => getRandomPositiveInteger(0, 20);
 
 class CommentTitle {
   getCommentTitle(data) {
@@ -217,7 +216,7 @@ class CommentDate {
 
   getCommentDate() {
     const commentMinutesGap = getRandomPositiveInteger(0, this.maxCommentMinutesGap);
-    let date = dayjs();
+    const date = dayjs();
     const commentDate = date.add(-commentMinutesGap, 'minutes'). format('YYYY/MM/DD HH:mm');
     return commentDate;
   }
@@ -236,7 +235,7 @@ class DateWatched {
     } else {
       const daysGap = getRandomPositiveInteger(0, this.maxDateDaysGap);
       this.dateWatched = dayjs();
-      this.dateWatched.add(-daysGap, 'days')
+      this.dateWatched.add(-daysGap, 'days');
     }
 
     return this.dateWatched;
@@ -245,9 +244,9 @@ class DateWatched {
 
 class Comment {
   constructor() {
-    this.emoji = new RandomItem().getRandomItem(emojiesList),
-    this.text = new RandomItem().getRandomItem(sentencesList),
-    this.author = new RandomItem().getRandomItem(authorsList),
+    this.emoji = new RandomItem().getRandomItem(EMOJIES_LIST),
+    this.text = new RandomItem().getRandomItem(SENTENCES_LIST),
+    this.author = new RandomItem().getRandomItem(AUTHORS_LIST),
     this.date = new CommentDate().getCommentDate();
   }
 }
@@ -256,12 +255,42 @@ class CommentsList {
   constructor() {
     this.commentsOfFilm = [];
   }
+
   getCommentsList(data) {
     for (let ii = 0; ii < data; ii++) {
       this.commentsOfFilm.push(new Comment());
     }
 
     return this.commentsOfFilm;
+  }
+}
+
+export default class FilmCard {
+  constructor() {
+    this.image = new RandomItem().getRandomItem(IMAGES_LIST);
+    this.title = new RandomItem().getRandomItem(TITLES_LIST);
+    this.originalTitle = new RandomItem().getRandomItem(ORIGINAL_TITLES_LIST);
+    this.rating = Number(new Rating().getRating());
+    this.director = new RandomItem().getRandomItem(DIRECTORS_LIST);
+    this.screenwriters = new RandomItem().getRandomItem(SCREENWRITERS_LIST);
+    this.actors = new RandomItem().getRandomItem(ACTORS_LIST);
+    this.releaseDate = new ReleaseDate().getDate();
+    this.releaseDateDMY = this.releaseDate.format('DD MMMM YYYY');
+    this.year = this.releaseDate.format('YYYY');
+    this.totalDuration = getRandomPositiveInteger(0, 240);
+    this.country = new RandomItem().getRandomItem(COUNTRIES_LIST);
+    this.genre = new RandomArray().getRandomArray(GENRES_LIST);
+    this.genreTitle = new GenreTitle().getGenreTitle(this.genre);
+    this.description = new Description().getDescription();
+    this.shortDescription = new ShortDescription().getShortDescription(this.description);
+    this.ageRating = new AgeRating().getAgeRating();
+    this.isInWatchlist = Boolean(getRandomPositiveInteger(0, 1));
+    this.isWatched = Boolean(getRandomPositiveInteger(0, 1));
+    this.dateWatched = new DateWatched().getDateWatched(this.isWatched);
+    this.isInFavorites = Boolean(getRandomPositiveInteger(0, 1));
+    this.commentsCount = getRandomPositiveInteger(0, 20);
+    this.commentsTitle = new CommentTitle().getCommentTitle(this.commentsCount);
+    this.commentsList = new CommentsList().getCommentsList(this.commentsCount);
   }
 }
 
@@ -384,34 +413,5 @@ class CommentsList {
 //   }
 //   return dateWatched;
 // };
-
-export default class FilmCard {
-  constructor() {
-    this.image = new RandomItem().getRandomItem(imagesList);
-    this.title = new RandomItem().getRandomItem(titlesList);
-    this.originalTitle = new RandomItem().getRandomItem(originalTitlesList);
-    this.rating = Number(new Rating().getRating());
-    this.director = new RandomItem().getRandomItem(directorsList);
-    this.screeenWriters = new RandomItem().getRandomItem(screenwritersList);
-    this.actors = new RandomItem().getRandomItem(actorsList);
-    this.releaseDate = new ReleaseDate().getDate();
-    this.releaseDateDMY = this.releaseDate.format('DD MMMM YYYY');
-    this.year = this.releaseDate.format('YYYY');
-    this.totalDuration = getRandomPositiveInteger(0, 240);
-    this.country = new RandomItem().getRandomItem(countriesList);
-    this.genre = new RandomArray().getRandomArray(genresList);
-    this.genreTitle = new GenreTitle().getGenreTitle(this.genre);
-    this.description = new Description().getDescription();
-    this.shortDescription = new ShortDescription().getShortDescription(this.description);
-    this.ageRating = new AgeRating().getAgeRating();
-    this.isInWatchList = Boolean(getRandomPositiveInteger(0, 1));
-    this.isWatched = Boolean(getRandomPositiveInteger(0, 1));
-    this.dateWatched = new DateWatched().getDateWatched(this.isWatched);
-    this.isInFavorites = Boolean(getRandomPositiveInteger(0, 1));
-    this.commentsCount = getRandomPositiveInteger(0, 20);
-    this.commentsTitle = new CommentTitle().getCommentTitle(this.commentsCount);
-    this.commentsList = new CommentsList().getCommentsList(this.commentsCount);
-  }
-}
 
 

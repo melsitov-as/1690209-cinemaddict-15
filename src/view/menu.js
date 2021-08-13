@@ -1,4 +1,4 @@
-import { createElement } from "./utils.js";
+import { createElement } from './utils.js';
 
 
 // Создает меню
@@ -16,17 +16,18 @@ const createMenuTemplate = (statisticsData) =>
 
 
 export default class SiteMenu {
-  constructor() {
+  constructor(statisticsData) {
+    this._statisticsData = statisticsData;
     this._element = null;
   }
 
-  getTemplate(statisticsData) {
-    return createMenuTemplate(statisticsData);
+  getTemplate() {
+    return createMenuTemplate(this._statisticsData);
   }
 
-  getElement(statisticsData) {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate(statisticsData));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
@@ -35,6 +36,5 @@ export default class SiteMenu {
   removeElement() {
     this._element = null;
   }
-
-};
+}
 
