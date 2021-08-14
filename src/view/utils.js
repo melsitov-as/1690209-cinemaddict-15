@@ -40,31 +40,6 @@ const getDuration = (data) => {
   }
 };
 
-// Создает карточку фильма
-const createFilmCard = (SiteFilmCardData, filmCardsDataIndex, SitePopupData, SiteCommentItemData, bodyData) => {
-  const filmCard = new SiteFilmCardData(filmCardsDataIndex);
-  filmCard.getElement().querySelector('.film-card__poster').addEventListener('click', () => {
-    const popup = new SitePopupData(filmCardsDataIndex).getElement();
-    popup.querySelector('.film-details__close-btn').addEventListener('click', () => {
-      bodyData.removeChild(popup);
-      bodyData.classList.remove('hide-overflow');
-    });
-    bodyData.appendChild(popup);
-    const popupCommentsContainer = popup.querySelector('.film-details__comments-list');
-    filmCardsDataIndex.commentsList.forEach((item) => {
-      renderElement(popupCommentsContainer, new SiteCommentItemData(item).getElement(), RenderPosition.BEFOREEND);
-    });
-
-    for (let ii = 0; ii < filmCardsDataIndex.commentsList.length; ii++) {
-      renderElement(popupCommentsContainer, new SiteCommentItemData(filmCardsDataIndex.commentsList[ii]).getElement(), RenderPosition.BEFOREEND);
-    }
-
-    bodyData.classList.add('hide-overflow');
-  });
-
-  return filmCard;
-};
-
 // Генерирует случайное дробное число
 const getRandomPositiveFloat = (a, b, digits = 1) => {
   const lower = Math.min(Math.abs(a), Math.abs(b));
@@ -81,4 +56,4 @@ const getRandomPositiveInteger = (a, b) => {
   return Math.floor(result);
 };
 
-export { RenderPosition, renderElement, renderTemplate, createElement, getDuration, getRandomPositiveFloat, getRandomPositiveInteger, createFilmCard };
+export { RenderPosition, renderElement, renderTemplate, createElement, getDuration, getRandomPositiveFloat, getRandomPositiveInteger};

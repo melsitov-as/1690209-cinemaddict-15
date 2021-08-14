@@ -97,321 +97,166 @@ const AUTHORS_LIST = [
   'Author - 5',
 ];
 
-// Класс Генерирует случайный элемент в массиве
-class RandomItem {
-  getRandomItem(data) {
-    return data[getRandomPositiveInteger(0, data.length - 1)];
-  }
-}
+// Генерирует случайный элемент в массиве
+const getRandomItem = (data) => data[getRandomPositiveInteger(0, data.length - 1)];
+
 
 // Класс Генерирует случайный массив
-class RandomArray {
-  constructor() {
-    this.count = 0;
-    this.shuffeledArray = [];
-  }
 
-  shuffleArray() {
-    return Math.random() - 0.5;
+const shuffle = (array) => {
+  for (let kk = 0; kk < array.length; kk++) {
+    for (let ii = array.length - 1; ii > 0; ii--) {
+      const jj = Math.floor(Math.random() * (ii + 1));
+      [array[ii], array[jj]] = [array[jj], array[ii]];
+    }
   }
+  return array;
+};
 
-  getRandomArray(arr) {
-    this.count = getRandomPositiveInteger(1, arr.length - 1);
-    this.shuffeledArray = arr.sort(this.shuffleArray);
-    return this.shuffeledArray.slice(0, this.count);
-  }
-}
+const getRandomArray = (array) => {
+  const shuffeledArray = shuffle(array);
+  const count = getRandomPositiveInteger(1, shuffeledArray.length);
+  return shuffeledArray.slice(0, count);
+};
 
-// Класс Генерирует рейтинг
-class Rating {
-  getRating() {
-    return getRandomPositiveFloat(1, 10, 1);
-  }
-}
+
+// Генерирует рейтинг
+const getRating = () => getRandomPositiveFloat(1, 10, 1);
+
 
 // Класс Генерирует дату релиза
-class ReleaseDate {
-  constructor() {
-    this.maxDaysGap = 36500;
+const getReleaseDate = () => {
+  const maxDaysGap = 36500;
+  const date = dayjs();
+  const daysGap = getRandomPositiveInteger(1, maxDaysGap);
+  return date.add(-daysGap, 'day');
+};
+
+
+// Генерирует Жанр или Жанры
+const getGenreTitle = (data) => {
+  if (data.length === 1) {
+    return 'Genre';
+  } else {
+    return 'Genres';
   }
-
-  getDate() {
-    const date = dayjs();
-    const daysGap = getRandomPositiveInteger(1, this.maxDaysGap);
-    const filmDate = date.add(-daysGap, 'day');
-    return filmDate;
-  }
-}
-
-// Класс Генерирует Жанр или Жанры
-class GenreTitle {
-  constructor() {
-    this.genreTitle = '';
-  }
-
-  getGenreTitle(data) {
-    if (data.length === 1) {
-      this.genreTitle = 'Genre';
-    } else {
-      this.genreTitle = 'Genres';
-    }
-
-    return this.genreTitle;
-  }
-}
-
-// Класс Генерирует описание
-class Description {
-  constructor() {
-    this.descriprionsArray = new RandomArray().getRandomArray(SENTENCES_LIST);
-  }
-
-  getDescription() {
-    let description = this.descriprionsArray.toString();
-    const re = /,/gi;
-    description = description.replace(re, '');
-
-    return description;
-  }
-}
-
-// Класс Генерирует короткое описание
-class ShortDescription {
-  getShortDescription(data) {
-    let shortDescription;
-    if (data.length > 140) {
-      shortDescription = data.slice(0, 138);
-      shortDescription += '...';
-    } else {
-      shortDescription = data;
-    }
-
-    return shortDescription;
-  }
-}
-// Класс Генерирует возрастной рейтинг
-class AgeRating {
-  getAgeRating() {
-    const num = getRandomPositiveInteger(0, 18);
-    return `${num}+`;
-  }
-}
-
-// Комментарии
-
-class CommentTitle {
-  getCommentTitle(data) {
-    if (data === 1) {
-      return 'comment';
-    } else {
-      return 'comments';
-    }
-  }
-}
-
-class CommentDate {
-  constructor() {
-    this.maxCommentMinutesGap = 5256000;
-  }
-
-  getCommentDate() {
-    const commentMinutesGap = getRandomPositiveInteger(0, this.maxCommentMinutesGap);
-    const date = dayjs();
-    const commentDate = date.add(-commentMinutesGap, 'minutes'). format('YYYY/MM/DD HH:mm');
-    return commentDate;
-  }
-}
-
-// Класс Когда фильм был просмотрен
-class DateWatched {
-  constructor() {
-    this.dateWatched = '';
-    this.maxDateDaysGap = 365;
-  }
-
-  getDateWatched(data) {
-    if (!data) {
-      this.dateWatched = false;
-    } else {
-      const daysGap = getRandomPositiveInteger(0, this.maxDateDaysGap);
-      this.dateWatched = dayjs();
-      this.dateWatched.add(-daysGap, 'days');
-    }
-
-    return this.dateWatched;
-  }
-}
-
-class Comment {
-  constructor() {
-    this.emoji = new RandomItem().getRandomItem(EMOJIES_LIST),
-    this.text = new RandomItem().getRandomItem(SENTENCES_LIST),
-    this.author = new RandomItem().getRandomItem(AUTHORS_LIST),
-    this.date = new CommentDate().getCommentDate();
-  }
-}
-
-class CommentsList {
-  constructor() {
-    this.commentsOfFilm = [];
-  }
-
-  getCommentsList(data) {
-    for (let ii = 0; ii < data; ii++) {
-      this.commentsOfFilm.push(new Comment());
-    }
-
-    return this.commentsOfFilm;
-  }
-}
-
-export default class FilmCard {
-  constructor() {
-    this.image = new RandomItem().getRandomItem(IMAGES_LIST);
-    this.title = new RandomItem().getRandomItem(TITLES_LIST);
-    this.originalTitle = new RandomItem().getRandomItem(ORIGINAL_TITLES_LIST);
-    this.rating = Number(new Rating().getRating());
-    this.director = new RandomItem().getRandomItem(DIRECTORS_LIST);
-    this.screenwriters = new RandomItem().getRandomItem(SCREENWRITERS_LIST);
-    this.actors = new RandomItem().getRandomItem(ACTORS_LIST);
-    this.releaseDate = new ReleaseDate().getDate();
-    this.releaseDateDMY = this.releaseDate.format('DD MMMM YYYY');
-    this.year = this.releaseDate.format('YYYY');
-    this.totalDuration = getRandomPositiveInteger(0, 240);
-    this.country = new RandomItem().getRandomItem(COUNTRIES_LIST);
-    this.genre = new RandomArray().getRandomArray(GENRES_LIST);
-    this.genreTitle = new GenreTitle().getGenreTitle(this.genre);
-    this.description = new Description().getDescription();
-    this.shortDescription = new ShortDescription().getShortDescription(this.description);
-    this.ageRating = new AgeRating().getAgeRating();
-    this.isInWatchlist = Boolean(getRandomPositiveInteger(0, 1));
-    this.isWatched = Boolean(getRandomPositiveInteger(0, 1));
-    this.dateWatched = new DateWatched().getDateWatched(this.isWatched);
-    this.isInFavorites = Boolean(getRandomPositiveInteger(0, 1));
-    this.commentsCount = getRandomPositiveInteger(0, 20);
-    this.commentsTitle = new CommentTitle().getCommentTitle(this.commentsCount);
-    this.commentsList = new CommentsList().getCommentsList(this.commentsCount);
-  }
-}
-
-
-// Генерирует случайный элемент в массиве
-// const getRandomItem = (data) => data[getRandomPositiveInteger(0, data.length - 1)];
-
-// Генерирует случайный массив случайной длины
-// const shuffleArray = (a, b) => {
-//   return Math.random() - 0.5
-// }
-
-// // Получить случайный массив
-// const getRandomArray = (arr) => {
-//   const count = getRandomPositiveInteger(1, arr.length - 1);
-//   const shuffeledArray = arr.sort(shuffleArray);
-//   return shuffeledArray.slice(0, count);
-// }
-
-
-// Генерирует дату релиза
-// const maxDaysGap = 36500;
-
-// const getDate = () => {
-//   let date = dayjs();
-//   const daysGap = getRandomPositiveInteger(1, maxDaysGap);
-//   let filmDate = date.add(-daysGap, 'day');
-
-//   return filmDate;
-// };
-
-// Генерирует жанр или жанры
-
-// const generateGenreTitle = (data) => {
-//   let genreTitle;
-//   if (data.length === 1) {
-//     genreTitle = 'Genre';
-//   } else {
-//     genreTitle = 'Genres';
-//   }
-
-//   return genreTitle;
-// };
+};
 
 // Генерирует описание
-// const generateDescription = () => {
-//   const descriptionsArray = getRandomArray(sentencesList)
-//   let description = descriptionsArray.toString();
-//   const re = /,/gi;
-//   description = description.replace(re, '');
+const getDescription = (data) => {
+  const descriptionsArray = getRandomArray(data);
+  let description = descriptionsArray.toString();
+  const re = /,/gi;
+  description = description.replace(re, '');
+  return description;
+};
 
-//   return description;
-// };
 
-// const generateShortDescription = (data) => {
-//   let shortDescription;
-//   if (data.length > 140) {
-//     shortDescription = data.slice(0, 138);
-//     shortDescription += '...';
-//   } else {
-//     shortDescription = data;
-//   }
+// Генерирует короткое описание
+const getShortDescription = (data) => {
+  let shortDescription;
+  if (data.length > 140) {
+    shortDescription = data.slice(0, 138);
+    shortDescription += '...';
+  } else {
+    shortDescription = data;
+  }
 
-//   return shortDescription;
-// };
+  return shortDescription;
+};
 
 // Генерирует возрастной рейтинг
-// const generateAgeRating = () => {
-//   const num = getRandomPositiveInteger(0, 18);
-//   return `${num}'+'`;
-// };
+const getAgeRating = () => {
+  const num = getRandomPositiveInteger(0, 18);
+  return `${num}+`;
+};
+
+// Комментарии
+const getCommentsTitle = (data) => {
+  if (data === 1) {
+    return 'comment';
+  } else {
+    return 'comments';
+  }
+};
+
+const getCommentDate = () => {
+  const maxCommentMinutesGap = 5256000;
+  const commentMinutesGap = getRandomPositiveInteger(0, maxCommentMinutesGap);
+  const date = dayjs();
+  const commentDate = date.add(-commentMinutesGap, 'minutes'). format('YYYY/MM/DD HH:mm');
+  return commentDate;
+};
+
+const getComment = () =>
+  ({
+    emoji: getRandomItem(EMOJIES_LIST),
+    text: getRandomItem(SENTENCES_LIST),
+    author: getRandomItem(AUTHORS_LIST),
+    data: getCommentDate(),
+  });
 
 
-// Генерирует комментарии
-// const generateCommentsCount = () => getRandomPositiveInteger(0, 20);
+const getCommentsCount = () => getRandomPositiveInteger(0, 20);
 
-// const generateCommentTitle = (data) => {
-//   if (data === 1) {
-//     return 'comment';
-//   } else {
-//     return 'comments';
-//   }
-// };
+const getCommentsList = (count) => {
+  const commentsOfFilm = [];
+  for (let ii = 0; ii < count; ii++) {
+    commentsOfFilm.push(getComment());
+  }
 
-// const generateCommentDate = () => {
-//   const maxCommentMinutesGap = 5256000;
-//   const commentMinutesGap = getRandomPositiveInteger(0, maxCommentMinutesGap);
-//   let date = dayjs();
-//   const commentDate = date.add(-commentMinutesGap, 'minutes').format('YYYY/MM/DD HH:mm');
-//   return commentDate;
-// };
-
-// const generateComment = () =>
-//   ({
-//     emoji: getRandomItem(emojiesList),
-//     text: getRandomItem(sentencesList),
-//     author: getRandomItem(authorsList),
-//     date: generateCommentDate(),
-//   });
-
-// const generateCommentsList = (data) => {
-//   const commentsOfFilm = [];
-//   for (let ii = 0; ii < data; ii++) {
-//     commentsOfFilm.push(generateComment());
-//   }
-//   return commentsOfFilm;
-// };
-
-// Генерирует булево значение
-// const getBoolean = () => Boolean(getRandomPositiveInteger(0, 1));
-
-// const getDateWatched = (data) => {
-//   let dateWatched;
-//   const maxDateDaysGap = 365;
-//   if (!data) {
-//     dateWatched = false;
-//   } else {
-//     const daysGap = getRandomPositiveInteger(0, maxDateDaysGap);
-//     dateWatched = dayjs().add(-daysGap, 'days');
-//   }
-//   return dateWatched;
-// };
+  return commentsOfFilm;
+};
 
 
+// Когда фильм был просмотрен
+const getDateWatched = (data) => {
+  let dateWatched = '';
+  const maxDateDaysGap = 365;
+
+  if (data === false) {
+    dateWatched = false;
+  } else {
+    const daysGap = getRandomPositiveInteger(0, maxDateDaysGap);
+    dateWatched = dayjs();
+    dateWatched.add(-daysGap, 'days');
+  }
+
+  return dateWatched;
+};
+
+const getFilmCard = () => {
+  const releaseDate = getReleaseDate();
+  const genre = getRandomArray(GENRES_LIST);
+  const description = getDescription(SENTENCES_LIST);
+  const isWatched = Boolean(getRandomPositiveInteger(0, 1));
+  const commentsCount = getCommentsCount();
+  return {
+    image: getRandomItem(IMAGES_LIST),
+    title: getRandomItem(TITLES_LIST),
+    originalTitle: getRandomItem(ORIGINAL_TITLES_LIST),
+    rating: Number(getRating()),
+    director: getRandomItem(DIRECTORS_LIST),
+    screenwriters: getRandomArray(SCREENWRITERS_LIST),
+    actors: getRandomArray(ACTORS_LIST),
+    releaseDate: releaseDate,
+    releaseDateDMY: releaseDate.format('DD MMMM YYYY'),
+    year: releaseDate.format('YYYY'),
+    totalDuration: getRandomPositiveInteger(0, 240),
+    country: getRandomItem(COUNTRIES_LIST),
+    genre: genre,
+    genreTitle: getGenreTitle(genre),
+    description: description,
+    shortDescription: getShortDescription(description),
+    ageRating: getAgeRating(),
+    isInWatchlist: Boolean(getRandomPositiveInteger(0, 1)),
+    isWatched: isWatched,
+    dateWatched: getDateWatched(isWatched),
+    isInFavorites: Boolean(getRandomPositiveInteger(0, 1)),
+    commentsCount: commentsCount,
+    commentsTitle: getCommentsTitle(commentsCount),
+    commentsList: getCommentsList(commentsCount),
+  };
+};
+
+export { getFilmCard };
