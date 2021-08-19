@@ -56,8 +56,8 @@ const showPopup = (filmCardData, sitePopupData) => {
 };
 
 
-const statistics = new SiteStatistics(filmCards);
-render(main, new SiteMenu(statistics), RenderPosition.BEFOREEND);
+// const statistics = new SiteStatistics(filmCards);
+// render(main, new SiteMenu(statistics), RenderPosition.BEFOREEND);
 
 if (FILM_CARDS_COUNT === 0) {
 
@@ -81,7 +81,7 @@ if (FILM_CARDS_COUNT === 0) {
   render(main, new SiteMenuFilter(), RenderPosition.BEFOREEND);
 
   // Показывает статистику
-  render(main, new SiteStatisticsMenu(statistics), RenderPosition.BEFOREEND);
+  // render(main, new SiteStatisticsMenu(statistics), RenderPosition.BEFOREEND);
 
   // Добавляет контейнер для фильмов
   render(main, new SiteFilmsContainer(), RenderPosition.BEFOREEND);
