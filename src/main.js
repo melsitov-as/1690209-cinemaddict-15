@@ -1,10 +1,10 @@
-import SiteMenu from './view/menu.js';
+// import SiteMenu from './view/menu.js';
 import SiteUserRank from './view/user-rank.js';
 import { getFilmCard }  from './mock/film-card-mock.js';
-import SiteStatistics from './view/filtration.js';
+// import SiteStatistics from './view/filtration.js';
 import { render, RenderPosition } from './utils/render.js';
 import SiteMenuFilter from './view/filters-menu';
-import SiteStatisticsMenu from './view/statistics.js';
+// import SiteStatisticsMenu from './view/statistics.js';
 import SiteFilmsContainer from './view/create-films-list.js';
 import SiteFilmCard from './view/film-card.js';
 import SiteShowMoreButton from './view/show-more-button.js';
