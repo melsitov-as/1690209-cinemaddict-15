@@ -1,4 +1,5 @@
-import { createElement, getDuration } from './utils.js';
+import { getDuration } from '../utils/common.js';
+import Abstract from './abstract.js';
 
 // Создает карточку фильма
 const createFilmCard = (filmCardData) => {
@@ -22,25 +23,23 @@ const createFilmCard = (filmCardData) => {
   </article>`;
 };
 
-export default class SiteFilmCard {
+export default class SiteFilmCard extends Abstract {
   constructor(filmCardData) {
+    super();
     this._filmCardData = filmCardData;
-    this._element = null;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmCard(this._filmCardData);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler() {
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments').forEach((item) => item.addEventListener('click', this._clickHandler));
   }
 }

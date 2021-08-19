@@ -1,4 +1,4 @@
-import { createElement } from './utils.js';
+import Abstract from './abstract.js';
 
 
 const createCommentItem = (filmCardsData) =>
@@ -16,25 +16,14 @@ const createCommentItem = (filmCardsData) =>
       </div>
   </li>`;
 
-export default class SiteCommentItem {
+export default class SiteCommentItem extends Abstract {
   constructor(filmCardData) {
+    super();
     this._filmCardData = filmCardData;
-    this._element = null;
   }
 
   getTemplate() {
     return createCommentItem(this._filmCardData);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
+

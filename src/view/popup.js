@@ -1,5 +1,5 @@
-import { getDuration } from './utils.js';
-import { createElement } from './utils.js';
+import Abstract from './abstract.js';
+import { getDuration } from '../utils/common.js';
 
 // Создает попап
 
@@ -116,25 +116,28 @@ const createPopup = (filmCardData) => {
 </section>`;
 };
 
-export default class SitePopup {
+export default class SitePopup extends Abstract {
   constructor(filmCardData) {
+    super();
     this._filmCardData = filmCardData;
-    this._element = null;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createPopup(this._filmCardData);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler() {
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
+  }
+
+  removeClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector('.film-details__close-btn').removeEventListener('click', this._clickHandler);
   }
 }

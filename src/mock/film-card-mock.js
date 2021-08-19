@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getRandomPositiveFloat, getRandomPositiveInteger } from '../view/utils.js';
+import { getRandomPositiveFloat, getRandomPositiveInteger } from '../utils/common.js';
 
 const IMAGES_LIST = [
   'popeye-meets-sinbad.png',

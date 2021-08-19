@@ -1,4 +1,4 @@
-import { createElement } from './utils.js';
+import Abstract from './abstract.js';
 
 // Создает фильтры
 const createMenuFilters = () =>
@@ -10,24 +10,8 @@ const createMenuFilters = () =>
 
 
 // Класс Меню фильтры
-export default class SiteMenuFilters {
-  constructor() {
-    this._element = null;
-  }
-
+export default class SiteMenuFilters extends Abstract {
   getTemplate() {
     return createMenuFilters();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

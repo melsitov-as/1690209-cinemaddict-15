@@ -1,4 +1,4 @@
-import { createElement } from './utils.js';
+import Abstract from './abstract.js';
 
 // Создает список фильмов
 const createFilmsContainer = () =>
@@ -10,24 +10,8 @@ const createFilmsContainer = () =>
     </section>
   </section>`;
 
-export default class SiteFilmsContainer {
-  constructor() {
-    this._element = null;
-  }
-
+export default class SiteFilmsContainer extends Abstract {
   getTemplate() {
     return createFilmsContainer();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

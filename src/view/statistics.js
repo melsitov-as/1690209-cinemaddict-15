@@ -1,4 +1,4 @@
-import { createElement } from './utils.js';
+import Abstract from './abstract.js';
 
 // Создает статистику
 
@@ -53,25 +53,13 @@ const createStatistics = (statisticsData) => {
   </section>`;
 };
 
-export default class SiteStatisticsMenu {
+export default class SiteStatisticsMenu extends Abstract {
   constructor(statisticsData) {
+    super();
     this._statisticsData = statisticsData;
-    this._element = null;
   }
 
   getTemplate() {
     return createStatistics(this._statisticsData);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,4 +1,4 @@
-import { createElement } from './utils.js';
+import Abstract from './abstract.js';
 
 // Создает список фильмов с наибольшим числом комментариев
 
@@ -9,25 +9,9 @@ const createMostCommentedFilmsList = () =>
     </div>
     </section>`;
 
-
-export default class SiteMostCommentedFilmsList {
-  constructor() {
-    this._element = null;
-  }
-
+export default class SiteMostCommentedFilmsList extends Abstract {
   getTemplate() {
     return createMostCommentedFilmsList();
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
+
