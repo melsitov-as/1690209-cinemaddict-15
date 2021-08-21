@@ -7,7 +7,7 @@ const createShowMoreButton = () =>
 export default class SiteShowMoreButton extends Abstract {
   constructor() {
     super();
-    this._clickHandler = this._clickHandler.bind(this);
+    this._showMoreHandler = this._showMoreHandler.bind(this);
   }
 
   getTemplate() {
@@ -16,13 +16,13 @@ export default class SiteShowMoreButton extends Abstract {
 
   // Это приватный метод, который будет являться обработчиком события он будет вызываться и в нем будут выполняться какие-то действия
   // а затем будет выполнятся колбэк
-  _clickHandler(evt) {
+  _showMoreHandler(evt) {
     evt.preventDefault();
     this._callback.click();
   }
 
-  setClickHandler(callback) {
+  setShowMoreHandler(callback) {
     this._callback.click = callback;
-    this.getElement().addEventListener('click', this._clickHandler);
+    this.getElement().addEventListener('click', this._showMoreHandler);
   }
 }

@@ -27,19 +27,19 @@ export default class SiteFilmCard extends Abstract {
   constructor(filmCardData) {
     super();
     this._filmCardData = filmCardData;
-    this._clickHandler = this._clickHandler.bind(this);
+    this._showHandler = this._showHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmCard(this._filmCardData);
   }
 
-  _clickHandler() {
+  _showHandler() {
     this._callback.click();
   }
 
-  setClickHandler(callback) {
+  setShowHandler(callback) {
     this._callback.click = callback;
-    this.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments').forEach((item) => item.addEventListener('click', this._clickHandler));
+    this.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments').forEach((item) => item.addEventListener('click', this._showHandler));
   }
 }
