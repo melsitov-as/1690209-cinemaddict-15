@@ -1,10 +1,32 @@
 import Abstract from './abstract.js';
 import { getDuration } from '../utils/common.js';
 
+const addStatus = (filmCardData) => {
+  let status = {
+      isInWatchlistActive: '',
+      isWatchedActive: '',
+      isInFavoritesActive: ''
+    };
+    if (filmCardData.isInWatchlist === true) {
+      status.isInWatchlistActive = 'film-details__control-button--active';
+    }
+
+    if (filmCardData.isWatched === true) {
+      status.isWatchedActive = 'film-details__control-button--active';
+    }
+
+    if (filmCardData.isInFavorites === true) {
+      status.isInFavoritesActive = 'film-details__control-button--active';
+    }
+
+    return status;
+}
+
 // Создает попап
 
 const createPopup = (filmCardData) => {
   const durationInHM = getDuration(filmCardData.totalDuration);
+  const status = addStatus(filmCardData);
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -69,9 +91,9 @@ const createPopup = (filmCardData) => {
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${status.isInWatchlistActive}" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watched ${status.isWatchedActive}" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--favorite ${status.isInFavoritesActive}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 

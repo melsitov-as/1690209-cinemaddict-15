@@ -8,6 +8,9 @@ export default class Abstract {
 
     this._element = null;
     this._callback = {};
+    this._callbackWatchlist = {};
+    this._callbackWatched = {};
+    this._callbackInFavorites = {};
   }
 
   getTemplate() {

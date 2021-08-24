@@ -232,6 +232,7 @@ const getFilmCard = () => {
   const isWatched = Boolean(getRandomPositiveInteger(0, 1));
   const commentsCount = getCommentsCount();
   return {
+    id: 0,
     image: getRandomItem(IMAGES_LIST),
     title: getRandomItem(TITLES_LIST),
     originalTitle: getRandomItem(ORIGINAL_TITLES_LIST),

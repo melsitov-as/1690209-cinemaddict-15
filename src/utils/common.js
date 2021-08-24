@@ -25,4 +25,28 @@ const getRandomPositiveInteger = (a, b) => {
   return Math.floor(result);
 };
 
-export { getDuration, getRandomPositiveFloat, getRandomPositiveInteger };
+// Заменяет один на элемент в массиве на другой, если этого элемента нет она просто вернёт этот массив обратно и ничего делать не будет
+const updateItem = (items, update) => {
+  const index = update._filmCardData.id;
+  // const indexIsInArray = items.findIndex((item) => item.id === update.id)
+  console.log(index);
+  console.log(update._filmCardData.id);
+  console.log(update._filmCardData.isInWatchlist);
+
+  // if (indexIsInArray === -1) {
+  //   items[index].id = update.id;
+  // }
+
+  // return items;
+  // if (index === -1) {
+  //   return items;
+  // }
+
+  // return {
+  //   ...items.slice(0, index),
+  //   update,
+  //   ...items.slice(index + 1)
+  // }
+}
+
+export { getDuration, getRandomPositiveFloat, getRandomPositiveInteger, updateItem };
