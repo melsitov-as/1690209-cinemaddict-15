@@ -2,10 +2,10 @@ import { getDuration } from '../utils/common.js';
 import Abstract from './abstract.js';
 
 const addStatus = (filmCardData) => {
-let status = {
+  const status = {
     isInWatchlistActive: '',
     isWatchedActive: '',
-    isInFavoritesActive: ''
+    isInFavoritesActive: '',
   };
   if (filmCardData.isInWatchlist === true) {
     status.isInWatchlistActive = 'film-card__controls-item--active';
@@ -20,13 +20,13 @@ let status = {
   }
 
   return status;
-}
+};
 
 // Создает карточку фильма
 const createFilmCard = (filmCardData) => {
   const durationInHM = getDuration(filmCardData.totalDuration);
   const status = addStatus(filmCardData);
-  return `<article class="film-card">
+  return `<article class="film-card film-card-${filmCardData.id}">
     <h3 class="film-card__title">${filmCardData.title}</h3>
     <p class="film-card__rating">${filmCardData.rating}</p>
     <p class="film-card__info">
@@ -94,6 +94,6 @@ export default class SiteFilmCard extends Abstract {
 
   setIsInFavoritesHandler(callback) {
     this._callbackInFavorites.click = callback;
-    this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._isInFavoritesHandler)
+    this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._isInFavoritesHandler);
   }
 }

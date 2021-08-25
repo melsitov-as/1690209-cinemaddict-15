@@ -2,25 +2,25 @@ import Abstract from './abstract.js';
 import { getDuration } from '../utils/common.js';
 
 const addStatus = (filmCardData) => {
-  let status = {
-      isInWatchlistActive: '',
-      isWatchedActive: '',
-      isInFavoritesActive: ''
-    };
-    if (filmCardData.isInWatchlist === true) {
-      status.isInWatchlistActive = 'film-details__control-button--active';
-    }
+  const status = {
+    isInWatchlistActive: '',
+    isWatchedActive: '',
+    isInFavoritesActive: '',
+  };
+  if (filmCardData.isInWatchlist === true) {
+    status.isInWatchlistActive = 'film-details__control-button--active';
+  }
 
-    if (filmCardData.isWatched === true) {
-      status.isWatchedActive = 'film-details__control-button--active';
-    }
+  if (filmCardData.isWatched === true) {
+    status.isWatchedActive = 'film-details__control-button--active';
+  }
 
-    if (filmCardData.isInFavorites === true) {
-      status.isInFavoritesActive = 'film-details__control-button--active';
-    }
+  if (filmCardData.isInFavorites === true) {
+    status.isInFavoritesActive = 'film-details__control-button--active';
+  }
 
-    return status;
-}
+  return status;
+};
 
 // Создает попап
 
@@ -143,6 +143,9 @@ export default class SitePopup extends Abstract {
     super();
     this._filmCardData = filmCardData;
     this._clickHandler = this._clickHandler.bind(this);
+    this._isInWatchlistHandler = this._isInWatchlistHandler.bind(this);
+    this._isWatchedHandler = this._isWatchedHandler.bind(this);
+    this._isInFavoritesHandler = this._isInFavoritesHandler.bind(this);
   }
 
   getTemplate() {
@@ -156,5 +159,32 @@ export default class SitePopup extends Abstract {
   setClickHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
+  }
+
+  _isInWatchlistHandler() {
+    this._callbackWatchlist.click();
+  }
+
+  setIsInWatchlistHandler(callback) {
+    this._callbackWatchlist.click = callback;
+    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._isInWatchlistHandler);
+  }
+
+  _isWatchedHandler() {
+    this._callbackWatched.click();
+  }
+
+  setIsWatchedHandler(callback) {
+    this._callbackWatched.click = callback;
+    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._isWatchedHandler);
+  }
+
+  _isInFavoritesHandler() {
+    this._callbackInFavorites.click();
+  }
+
+  setIsInFavoritesHandler(callback) {
+    this._callbackInFavorites.click = callback;
+    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._isInFavoritesHandler);
   }
 }
