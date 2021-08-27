@@ -45,7 +45,7 @@ export default class MoviesBoard {
     this._mostCommentedFilmsList = new SiteMostCommentedFilmsList();
     this._renderedFilmCardsCount = FILM_CARDS_COUNT_PER_STEP;
     this._loadMoreButton = new SiteShowMoreButton();
-    this._updatedFilmCardData = [];
+    this._renderedFilmCards = [];
   }
 
 
@@ -89,6 +89,7 @@ export default class MoviesBoard {
       this._filmCardsArray[indexWatchlist].isInWatchlist = filmCardData.isInWatchlist;
       remove(this._siteMenu);
       render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
+      this._changeFilmCard(filmCardData);
     });
     filmCardData.setIsWatchedHandler(() => {
       const buttonWatched = filmCardData.getElement().querySelector('.film-card__controls-item--mark-as-watched');
@@ -138,6 +139,14 @@ export default class MoviesBoard {
       remove(this._siteMenu);
       render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
     });
+  }
+
+  _changeFilmCard(filmCardData) {
+    this._renderedFilmCards.forEach((item) => {
+      if (item._filmCardData.id === filmCardData._filmCardData.id) {
+        item.getElement().parentElement.replaceChild(filmCardData.getElement(), item.getElement());
+      }
+    })
   }
 
   _changeStatisticsByClickPopupButtons(filmCardData, popupData) {
@@ -258,18 +267,18 @@ export default class MoviesBoard {
 
     for (let ii = 0; ii < Math.min(this._filmCardsArray.length, FILM_CARDS_COUNT_PER_STEP); ii++) {
       const filmCard = this._getFilmCard(this._filmCardsArray[ii]);
-
+      this._renderedFilmCards.push(filmCard);
       render(filmsListContainer, filmCard, RenderPosition.BEFOREEND);
-      const sitePopup = this._getPopup(this._filmCardsArray[ii]);
-      const popupCommentsContainer = sitePopup.getElement().querySelector('.film-details__comments-list');
-      this._filmCardsArray[ii].commentsList.forEach((item) => {
-        render(popupCommentsContainer, this._getPopupCommentItem(item), RenderPosition.BEFOREEND);
-      });
-      filmCard.setShowHandler(() => {
-        this._getPopupElement(sitePopup);
-        this._showPopup(sitePopup);
-        this._changeStatisticsByClickPopupButtons(filmCard, sitePopup);
-      });
+      // const sitePopup = this._getPopup(this._filmCardsArray[ii]);
+      // const popupCommentsContainer = sitePopup.getElement().querySelector('.film-details__comments-list');
+      // this._filmCardsArray[ii].commentsList.forEach((item) => {
+      //   render(popupCommentsContainer, this._getPopupCommentItem(item), RenderPosition.BEFOREEND);
+      // });
+      // filmCard.setShowHandler(() => {
+      //   this._getPopupElement(sitePopup);
+      //   this._showPopup(sitePopup);
+      //   this._changeStatisticsByClickPopupButtons(filmCard, sitePopup);
+      // });
       this._changeStatisticsByClickFilmCardButtons(filmCard);
     }
   }
@@ -287,17 +296,18 @@ export default class MoviesBoard {
           .forEach((filmCard) => {
             const filmCardLoaded = this._getFilmCard(filmCard);
             render(filmsListContainer, filmCardLoaded, RenderPosition.BEFOREEND);
-            const sitePopupLoaded = this._getPopup(filmCard);
-            const popupCommentsContainerLoaded = sitePopupLoaded.getElement().querySelector('.film-details__comments-list');
-            filmCard.commentsList.forEach((item) => {
-              render(popupCommentsContainerLoaded, this._getPopupCommentItem(item), RenderPosition.BEFOREEND);
-            });
-            filmCardLoaded.setShowHandler(() => {
-              this._getPopupElement(sitePopupLoaded);
-              this._showPopup(sitePopupLoaded);
-              this._changeStatisticsByClickPopupButtons(filmCardLoaded, sitePopupLoaded);
-            });
-            this._changeStatisticsByClickFilmCardButtons(filmCardLoaded);
+            this._renderedFilmCards.push(filmCardLoaded);
+            // const sitePopupLoaded = this._getPopup(filmCard);
+            // const popupCommentsContainerLoaded = sitePopupLoaded.getElement().querySelector('.film-details__comments-list');
+            // filmCard.commentsList.forEach((item) => {
+            //   render(popupCommentsContainerLoaded, this._getPopupCommentItem(item), RenderPosition.BEFOREEND);
+            // });
+            // filmCardLoaded.setShowHandler(() => {
+            //   this._getPopupElement(sitePopupLoaded);
+            //   this._showPopup(sitePopupLoaded);
+            //   this._changeStatisticsByClickPopupButtons(filmCardLoaded, sitePopupLoaded);
+            // });
+            // this._changeStatisticsByClickFilmCardButtons(filmCardLoaded);
           });
         renderedFilmCardsCount += FILM_CARDS_COUNT_PER_STEP;
         if (renderedFilmCardsCount >= this._filmCardsArray.length) {
@@ -326,17 +336,18 @@ export default class MoviesBoard {
     // Добавляет фильмы в контейнер с наибольшим рейтингом
     for (let ii = 0; ii < 2; ii++) {
       const filmCardTopRated = this._getFilmCard(sortedFilmCardsByRating[ii]);
+      this._renderedFilmCards.push(filmCardTopRated);
       render(topRatedFilmsContainer, filmCardTopRated, RenderPosition.BEFOREEND);
-      const sitePopupTopRated = this._getPopup(sortedFilmCardsByRating[ii]);
-      const popupCommentsContainerTopRated = sitePopupTopRated.getElement().querySelector('.film-details__comments-list');
-      sortedFilmCardsByRating[ii].commentsList.forEach((item) => {
-        render(popupCommentsContainerTopRated, this._getPopupCommentItem(item), RenderPosition.BEFOREEND);
-      });
-      filmCardTopRated.setShowHandler(() => {
-        this._getPopupElement(sitePopupTopRated);
-        this._showPopup(sitePopupTopRated);
-        this._changeStatisticsByClickPopupButtons(filmCardTopRated, sitePopupTopRated);
-      });
+      // const sitePopupTopRated = this._getPopup(sortedFilmCardsByRating[ii]);
+      // const popupCommentsContainerTopRated = sitePopupTopRated.getElement().querySelector('.film-details__comments-list');
+      // sortedFilmCardsByRating[ii].commentsList.forEach((item) => {
+      //   render(popupCommentsContainerTopRated, this._getPopupCommentItem(item), RenderPosition.BEFOREEND);
+      // });
+      // filmCardTopRated.setShowHandler(() => {
+      //   this._getPopupElement(sitePopupTopRated);
+      //   this._showPopup(sitePopupTopRated);
+      //   this._changeStatisticsByClickPopupButtons(filmCardTopRated, sitePopupTopRated);
+      // });
       this._changeStatisticsByClickFilmCardButtons(filmCardTopRated);
     }
   }
@@ -354,17 +365,18 @@ export default class MoviesBoard {
     for (let ii = 0; ii < 2; ii++) {
       const filmCardMostCommented = this._getFilmCard(sortedFilmCardsByComments[ii]);
       render(mostCommentedFilmsContainer, filmCardMostCommented, RenderPosition.BEFOREEND);
-      const sitePopupMostCommented = this._getPopup(sortedFilmCardsByComments[ii]);
-      const popupCommentsContainerMostCommented = sitePopupMostCommented.getElement().querySelector('.film-details__comments-list');
-      sortedFilmCardsByComments[ii].commentsList.forEach((item) => {
-        render(popupCommentsContainerMostCommented, this._getPopupCommentItem(item), RenderPosition.BEFOREEND);
-      });
+      this._renderedFilmCards.push(filmCardMostCommented);
+      // const sitePopupMostCommented = this._getPopup(sortedFilmCardsByComments[ii]);
+      // const popupCommentsContainerMostCommented = sitePopupMostCommented.getElement().querySelector('.film-details__comments-list');
+      // sortedFilmCardsByComments[ii].commentsList.forEach((item) => {
+      //   render(popupCommentsContainerMostCommented, this._getPopupCommentItem(item), RenderPosition.BEFOREEND);
+      // });
 
-      filmCardMostCommented.setShowHandler(() => {
-        this._getPopupElement(sitePopupMostCommented);
-        this._showPopup(sitePopupMostCommented);
-        this._changeStatisticsByClickPopupButtons(filmCardMostCommented, sitePopupMostCommented);
-      });
+      // filmCardMostCommented.setShowHandler(() => {
+      //   this._getPopupElement(sitePopupMostCommented);
+      //   this._showPopup(sitePopupMostCommented);
+      //   this._changeStatisticsByClickPopupButtons(filmCardMostCommented, sitePopupMostCommented);
+      // });
       this._changeStatisticsByClickFilmCardButtons(filmCardMostCommented);
     }
   }
