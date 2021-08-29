@@ -45,7 +45,7 @@ export default class MoviesBoard {
     this._mostCommentedFilmsList = new SiteMostCommentedFilmsList();
     this._renderedFilmCardsCount = FILM_CARDS_COUNT_PER_STEP;
     this._loadMoreButton = new SiteShowMoreButton();
-    this._renderedFilmCards = [];
+    this._renderedFilmCardsMostCommented = [];
   }
 
 
@@ -65,158 +65,253 @@ export default class MoviesBoard {
     }
   }
 
-  _changeStatisticsByClickFilmCardButtons(filmCardData) {
-    filmCardData.setIsInWatchlistHandler(() => {
-      // Изменяет значение в статистике в watchlist
-      const buttonWatchlist = filmCardData.getElement().querySelector('.film-card__controls-item--add-to-watchlist');
-      buttonWatchlist.classList.toggle('film-card__controls-item--active');
-      if (buttonWatchlist.classList.contains('film-card__controls-item--active')) {
-        this._statistics.inWatchlistCount += 1;
-        filmCardData.isInWatchlist = true;
-      } else {
-        filmCardData.isInWatchlist = false;
-        this._statistics.inWatchlistCount -= 1;
+  _getFilmCard(filmCardData) {
+    let oldFilmCard = new SiteFilmCard(filmCardData);
+    let oldFilmCardWatched;
+    let newFilmCardWatchlistReversed;
+    let newFilmCardWatchedReversed;
+    oldFilmCard.setIsInWatchlistHandler(() => {
+      if (newFilmCardWatchlistReversed === undefined) {
+        filmCardData.isInWatchlist = !filmCardData.isInWatchlist;
+        newFilmCardWatchlistReversed = new SiteFilmCard(filmCardData);
+        newFilmCardWatchlistReversed.setIsInWatchlistHandler(() => {
+          newFilmCardWatchlistReversed.getElement().parentElement.replaceChild(oldFilmCard.getElement(), newFilmCardWatchlistReversed.getElement());
+        })
       }
-      if (this._statistics.inWatchlistCount < 0) {
-        this._statistics.inWatchlistCount = 0;
-      }
-      if (body.contains(body.querySelector('.film-details'))) {
-        const popupButtonWatchlist = body.querySelector('.film-details').querySelector('.film-details__control-button--watchlist');
-        popupButtonWatchlist.classList.toggle('film-details__control-button--active');
-      }
-      // Заменяет значение в исходном массиве
-      const indexWatchlist = filmCardData._filmCardData.id;
-      this._filmCardsArray[indexWatchlist].isInWatchlist = filmCardData.isInWatchlist;
-      remove(this._siteMenu);
-      render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
-      this._changeFilmCard(filmCardData);
-    });
-    filmCardData.setIsWatchedHandler(() => {
-      const buttonWatched = filmCardData.getElement().querySelector('.film-card__controls-item--mark-as-watched');
-      buttonWatched.classList.toggle('film-card__controls-item--active');
-      if (buttonWatched.classList.contains('film-card__controls-item--active')) {
-        this._statistics.inHistoryCount += 1;
-        filmCardData.isWatched = true;
-      } else {
-        this._statistics.inHistoryCount -= 1;
-        filmCardData.isWatched = false;
-        filmCardData.dateWatched = false;
-      }
-      if (this._statistics.inHistoryCount < 0) {
-        this._statistics.inHistoryCount = 0;
-      }
-      if (body.contains(body.querySelector('.film-details'))) {
-        const popupButtonWatchlist = body.querySelector('.film-details').querySelector('.film-details__control-button--watched');
-        popupButtonWatchlist.classList.toggle('film-details__control-button--active');
-      }
-      // Заменяет значение в исходном массиве
-      const indexWatched = filmCardData._filmCardData.id;
-      this._filmCardsArray[indexWatched].isWatched = filmCardData.isWatched;
-      remove(this._siteMenu);
-      render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
-    });
-    filmCardData.setIsInFavoritesHandler(() => {
-      const buttonFavorites = filmCardData.getElement().querySelector('.film-card__controls-item--favorite');
-      buttonFavorites.classList.toggle('film-card__controls-item--active');
-      if (buttonFavorites.classList.contains('film-card__controls-item--active')) {
-        this._statistics.inFavoritesCount += 1;
-        filmCardData.isInFavorites = true;
-      } else {
-        this._statistics.inFavoritesCount -= 1;
-        filmCardData.isInFavorites = false;
-      }
-      if (this._statistics.isInFavoritesCount < 0) {
-        this._statistics.isInFavoritesCount = 0;
-      }
-      if (body.contains(body.querySelector('.film-details'))) {
-        const popupButtonFavorites = body.querySelector('.film-details').querySelector('.film-details__control-button--favorite');
-        popupButtonFavorites.classList.toggle('film-details__control-button--active');
-      }
-
-      // Заменяет значение в исходном массиве
-      const indexFavorites = filmCardData._filmCardData.id;
-      this._filmCardsArray[indexFavorites].isInFavorites = filmCardData.isInFavorites;
-      remove(this._siteMenu);
-      render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
-    });
-  }
-
-  _changeFilmCard(filmCardData) {
-    this._renderedFilmCards.forEach((item) => {
-      if (item._filmCardData.id === filmCardData._filmCardData.id) {
-        item.getElement().parentElement.replaceChild(filmCardData.getElement(), item.getElement());
-      }
+      newFilmCardWatchlistReversed.setIsInWatchlistHandler(() => {
+        newFilmCardWatchlistReversed.getElement().parentElement.replaceChild(oldFilmCard.getElement(), newFilmCardWatchlistReversed.getElement());
+      })
+      oldFilmCard.getElement().parentElement.replaceChild(newFilmCardWatchlistReversed.getElement(), oldFilmCard.getElement())
     })
+    oldFilmCard.setIsWatchedHandler(() => {
+      if (newFilmCardWatchedReversed === undefined) {
+        filmCardData.isWatched = !filmCardData.isWatched;
+        newFilmCardWatchedReversed = new SiteFilmCard(filmCardData);
+        // Новая появилась на новую добавляем клик
+        newFilmCardWatchedReversed
+      }
+      oldFilmCard.getElement().parentElement.replaceChild(newFilmCardWatchedReversed.getElement(), oldFilmCard.getElement())
+    })
+
+
+
+
+    return oldFilmCard;
   }
 
-  _changeStatisticsByClickPopupButtons(filmCardData, popupData) {
-    popupData.setIsInWatchlistHandler(() => {
-      // Изменяет значение в статистике в watchlist
-      const buttonWatchlist = popupData.getElement().querySelector('.film-details__control-button--watchlist');
-      buttonWatchlist.classList.toggle('film-details__control-button--active');
-      if (buttonWatchlist.classList.contains('film-details__control-button--active')) {
-        this._statistics.inWatchlistCount += 1;
-        filmCardData.isInWatchlist = true;
-      } else {
-        filmCardData.isInWatchlist = false;
-        this._statistics.inWatchlistCount -= 1;
-      }
-      if (this._statistics.inWatchlistCount < 0) {
-        this._statistics.inWatchlistCount = 0;
-      }
-      // Заменяет значение в исходном массиве
-      const indexWatchlist = filmCardData._filmCardData.id;
-      this._filmCardsArray[indexWatchlist].isInWatchlist = filmCardData.isInWatchlist;
-      const currentFilmCardButtonWatchlist = body.querySelector(`.film-card-${filmCardData._filmCardData.id}`).querySelector('.film-card__controls-item--add-to-watchlist');
-      currentFilmCardButtonWatchlist.classList.toggle('film-card__controls-item--active');
-      remove(this._siteMenu);
-      render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
-    });
 
-    popupData.setIsWatchedHandler(() => {
-      const buttonWatched = popupData.getElement().querySelector('.film-details__control-button--watched');
-      buttonWatched.classList.toggle('film-details__control-button--active');
-      if (buttonWatched.classList.contains('film-details__control-button--active')) {
-        this._statistics.inHistoryCount += 1;
-        filmCardData.isWatched = true;
-      } else {
-        this._statistics.inHistoryCount -= 1;
-        filmCardData.isWatched = false;
-        filmCardData.dateWatched = false;
-      }
-      if (this._statistics.inHistoryCount < 0) {
-        this._statistics.inHistoryCount = 0;
-      }
-      // Заменяет значение в исходном массиве
-      const indexWatched = filmCardData._filmCardData.id;
-      this._filmCardsArray[indexWatched].isWatched = filmCardData.isWatched;
-      remove(this._siteMenu);
-      render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
-      const currentFilmCardButtonWatched = body.querySelector(`.film-card-${filmCardData._filmCardData.id}`).querySelector('.film-card__controls-item--mark-as-watched');
-      currentFilmCardButtonWatched.classList.toggle('film-card__controls-item--active');
-    });
-    popupData.setIsInFavoritesHandler(() => {
-      const buttonFavorites = popupData.getElement().querySelector('.film-details__control-button--favorite');
-      buttonFavorites.classList.toggle('film-details__control-button--active');
-      if (buttonFavorites.classList.contains('film-details__control-button--active')) {
-        this._statistics.inFavoritesCount += 1;
-        filmCardData.isInFavorites = true;
-      } else {
-        this._statistics.inFavoritesCount -= 1;
-        filmCardData.isInFavorites = false;
-      }
-      if (this._statistics.isInFavoritesCount < 0) {
-        this._statistics.isInFavoritesCount = 0;
-      }
-      // Заменяет значение в исходном массиве
-      const indexFavorites = filmCardData._filmCardData.id;
-      this._filmCardsArray[indexFavorites].isInFavorites = filmCardData.isInFavorites;
-      remove(this._siteMenu);
-      render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
-      const currentFilmCardButtonWatched = body.querySelector(`.film-card-${filmCardData._filmCardData.id}`).querySelector('.film-card__controls-item--favorite');
-      currentFilmCardButtonWatched.classList.toggle('film-card__controls-item--active');
-    });
-  }
+  // Получает данные для карточки фильма
+  // _getFilmCard(filmCardData) {
+  //   let oldFilmCard = new SiteFilmCard(filmCardData);
+  //   let newFilmCard;
+  //   oldFilmCard.setIsInWatchlistHandler(() => {
+  //     if (newFilmCard === undefined ) {
+  //       filmCardData.isInWatchlist = !filmCardData.isInWatchlist;
+  //       newFilmCard = new SiteFilmCard(filmCardData);
+  //     }
+  //     oldFilmCard.getElement().parentElement.replaceChild(newFilmCard.getElement(), oldFilmCard.getElement())
+  //     newFilmCard.setIsInWatchlistHandler(() => {
+  //       newFilmCard.getElement().parentElement.replaceChild(oldFilmCard.getElement(), newFilmCard.getElement())
+  //     })
+  //     // После смены на новый надо на новый установить переключатель на вторую кнопку
+  //     newFilmCard.setIsWatchedHandler(() => {
+  //       filmCardData.isWatched = !filmCardData.isWatched;
+  //       oldFilmCard = new SiteFilmCard(filmCardData);
+  //       newFilmCard.getElement().parentElement.replaceChild(oldFilmCard.getElement(), newFilmCard.getElement())
+  //       oldFilmCard.s
+  //     })
+
+  //   })
+  //   // oldFilmCard уже создана новой еще нет
+  //   oldFilmCard.setIsWatchedHandler(() => {
+  //     if (newFilmCard !== undefined) {
+  //       console.log(oldFilmCard)
+  //     }
+  //   })
+
+
+  //   // если newFilmCard !== undefined
+  //   return oldFilmCard;
+  // }
+
+
+//   _changeFilmCard() {
+//     let newFilmCard;
+
+//     for (let card of this._renderedFilmCardsMostCommented) {
+//       let oldFilmCard = card;
+//       oldFilmCard.setIsInWatchlistHandler(() => {
+//         if (newFilmCard === undefined) {
+//           card._filmCardData.isInWatchlist = !card._filmCardData.isInWatchlist;
+//           newFilmCard = new SiteFilmCard(oldFilmCard._filmCardData)
+//         }
+//         oldFilmCard.getElement().parentElement.replaceChild(newFilmCard.getElement(), oldFilmCard.getElement())
+//         newFilmCard.setIsInWatchlistHandler(() => {
+//           newFilmCard.getElement().parentElement.replaceChild(oldFilmCard.getElement(), newFilmCard.getElement())
+//         })
+//       })
+//       oldFilmCard.setIsWatchedHandler(() => {
+
+//       })
+//   }
+// }
+
+  // _setHandler(card, filmCardData) {
+
+  //   card.setIsInWatchlistHandler(() => {
+  //     filmCardData.isInWatchlist = !filmCardData.isInWatchlist;
+  //     let newFilmCard = new SiteFilmCard(filmCardData);
+  //     this._mostCommentedFilmsList.getElement().replaceChild(newFilmCard.getElement(), card.getElement())
+  //     newFilmCard.setIsInWatchlistHandler(() => {
+  //       this._mostCommentedFilmsList.getElement().replaceChild(card.getElement(), newFilmCard.getElement())
+  //     })
+  //   })
+  // }
+
+  // _changeStatisticsByClickFilmCardButtons(filmCardData) {
+  //   filmCardData.setIsInWatchlistHandler(() => {
+  //     // Изменяет значение в статистике в watchlist
+  //     const buttonWatchlist = filmCardData.getElement().querySelector('.film-card__controls-item--add-to-watchlist');
+  //     buttonWatchlist.classList.toggle('film-card__controls-item--active');
+  //     if (buttonWatchlist.classList.contains('film-card__controls-item--active')) {
+  //       this._statistics.inWatchlistCount += 1;
+  //       filmCardData.isInWatchlist = true;
+  //     } else {
+  //       filmCardData.isInWatchlist = false;
+  //       this._statistics.inWatchlistCount -= 1;
+  //     }
+  //     if (this._statistics.inWatchlistCount < 0) {
+  //       this._statistics.inWatchlistCount = 0;
+  //     }
+  //     if (body.contains(body.querySelector('.film-details'))) {
+  //       const popupButtonWatchlist = body.querySelector('.film-details').querySelector('.film-details__control-button--watchlist');
+  //       popupButtonWatchlist.classList.toggle('film-details__control-button--active');
+  //     }
+  //     // Заменяет значение в исходном массиве
+  //     const indexWatchlist = filmCardData._filmCardData.id;
+  //     this._filmCardsArray[indexWatchlist].isInWatchlist = filmCardData.isInWatchlist;
+  //     remove(this._siteMenu);
+  //     render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
+  //     this._changeFilmCard(filmCardData);
+  //   });
+  //   filmCardData.setIsWatchedHandler(() => {
+  //     const buttonWatched = filmCardData.getElement().querySelector('.film-card__controls-item--mark-as-watched');
+  //     buttonWatched.classList.toggle('film-card__controls-item--active');
+  //     if (buttonWatched.classList.contains('film-card__controls-item--active')) {
+  //       this._statistics.inHistoryCount += 1;
+  //       filmCardData.isWatched = true;
+  //     } else {
+  //       this._statistics.inHistoryCount -= 1;
+  //       filmCardData.isWatched = false;
+  //       filmCardData.dateWatched = false;
+  //     }
+  //     if (this._statistics.inHistoryCount < 0) {
+  //       this._statistics.inHistoryCount = 0;
+  //     }
+  //     if (body.contains(body.querySelector('.film-details'))) {
+  //       const popupButtonWatchlist = body.querySelector('.film-details').querySelector('.film-details__control-button--watched');
+  //       popupButtonWatchlist.classList.toggle('film-details__control-button--active');
+  //     }
+  //     // Заменяет значение в исходном массиве
+  //     const indexWatched = filmCardData._filmCardData.id;
+  //     this._filmCardsArray[indexWatched].isWatched = filmCardData.isWatched;
+  //     remove(this._siteMenu);
+  //     render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
+  //   });
+  //   filmCardData.setIsInFavoritesHandler(() => {
+  //     const buttonFavorites = filmCardData.getElement().querySelector('.film-card__controls-item--favorite');
+  //     buttonFavorites.classList.toggle('film-card__controls-item--active');
+  //     if (buttonFavorites.classList.contains('film-card__controls-item--active')) {
+  //       this._statistics.inFavoritesCount += 1;
+  //       filmCardData.isInFavorites = true;
+  //     } else {
+  //       this._statistics.inFavoritesCount -= 1;
+  //       filmCardData.isInFavorites = false;
+  //     }
+  //     if (this._statistics.isInFavoritesCount < 0) {
+  //       this._statistics.isInFavoritesCount = 0;
+  //     }
+  //     if (body.contains(body.querySelector('.film-details'))) {
+  //       const popupButtonFavorites = body.querySelector('.film-details').querySelector('.film-details__control-button--favorite');
+  //       popupButtonFavorites.classList.toggle('film-details__control-button--active');
+  //     }
+
+  //     // Заменяет значение в исходном массиве
+  //     const indexFavorites = filmCardData._filmCardData.id;
+  //     this._filmCardsArray[indexFavorites].isInFavorites = filmCardData.isInFavorites;
+  //     remove(this._siteMenu);
+  //     render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
+  //   });
+  // }
+
+  // _changeStatisticsByClickPopupButtons(filmCardData, popupData) {
+  //   popupData.setIsInWatchlistHandler(() => {
+  //     // Изменяет значение в статистике в watchlist
+  //     const buttonWatchlist = popupData.getElement().querySelector('.film-details__control-button--watchlist');
+  //     buttonWatchlist.classList.toggle('film-details__control-button--active');
+  //     if (buttonWatchlist.classList.contains('film-details__control-button--active')) {
+  //       this._statistics.inWatchlistCount += 1;
+  //       filmCardData.isInWatchlist = true;
+  //     } else {
+  //       filmCardData.isInWatchlist = false;
+  //       this._statistics.inWatchlistCount -= 1;
+  //     }
+  //     if (this._statistics.inWatchlistCount < 0) {
+  //       this._statistics.inWatchlistCount = 0;
+  //     }
+  //     // Заменяет значение в исходном массиве
+  //     const indexWatchlist = filmCardData._filmCardData.id;
+  //     this._filmCardsArray[indexWatchlist].isInWatchlist = filmCardData.isInWatchlist;
+  //     const currentFilmCardButtonWatchlist = body.querySelector(`.film-card-${filmCardData._filmCardData.id}`).querySelector('.film-card__controls-item--add-to-watchlist');
+  //     currentFilmCardButtonWatchlist.classList.toggle('film-card__controls-item--active');
+  //     remove(this._siteMenu);
+  //     render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
+  //   });
+
+  //   popupData.setIsWatchedHandler(() => {
+  //     const buttonWatched = popupData.getElement().querySelector('.film-details__control-button--watched');
+  //     buttonWatched.classList.toggle('film-details__control-button--active');
+  //     if (buttonWatched.classList.contains('film-details__control-button--active')) {
+  //       this._statistics.inHistoryCount += 1;
+  //       filmCardData.isWatched = true;
+  //     } else {
+  //       this._statistics.inHistoryCount -= 1;
+  //       filmCardData.isWatched = false;
+  //       filmCardData.dateWatched = false;
+  //     }
+  //     if (this._statistics.inHistoryCount < 0) {
+  //       this._statistics.inHistoryCount = 0;
+  //     }
+  //     // Заменяет значение в исходном массиве
+  //     const indexWatched = filmCardData._filmCardData.id;
+  //     this._filmCardsArray[indexWatched].isWatched = filmCardData.isWatched;
+  //     remove(this._siteMenu);
+  //     render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
+  //     const currentFilmCardButtonWatched = body.querySelector(`.film-card-${filmCardData._filmCardData.id}`).querySelector('.film-card__controls-item--mark-as-watched');
+  //     currentFilmCardButtonWatched.classList.toggle('film-card__controls-item--active');
+  //   });
+  //   popupData.setIsInFavoritesHandler(() => {
+  //     const buttonFavorites = popupData.getElement().querySelector('.film-details__control-button--favorite');
+  //     buttonFavorites.classList.toggle('film-details__control-button--active');
+  //     if (buttonFavorites.classList.contains('film-details__control-button--active')) {
+  //       this._statistics.inFavoritesCount += 1;
+  //       filmCardData.isInFavorites = true;
+  //     } else {
+  //       this._statistics.inFavoritesCount -= 1;
+  //       filmCardData.isInFavorites = false;
+  //     }
+  //     if (this._statistics.isInFavoritesCount < 0) {
+  //       this._statistics.isInFavoritesCount = 0;
+  //     }
+  //     // Заменяет значение в исходном массиве
+  //     const indexFavorites = filmCardData._filmCardData.id;
+  //     this._filmCardsArray[indexFavorites].isInFavorites = filmCardData.isInFavorites;
+  //     remove(this._siteMenu);
+  //     render(main, this._siteMenu, RenderPosition.AFTERBEGIN);
+  //     const currentFilmCardButtonWatched = body.querySelector(`.film-card-${filmCardData._filmCardData.id}`).querySelector('.film-card__controls-item--favorite');
+  //     currentFilmCardButtonWatched.classList.toggle('film-card__controls-item--active');
+  //   });
+  // }
 
   _clearBoard() {
     remove(this._userRank);
@@ -225,10 +320,6 @@ export default class MoviesBoard {
     remove(this._siteFilmsContainer);
   }
 
-  // Получает данные для карточки фильма
-  _getFilmCard(filmCardData) {
-    return new SiteFilmCard(filmCardData);
-  }
 
 
   // Получает данные для попапа
@@ -267,7 +358,6 @@ export default class MoviesBoard {
 
     for (let ii = 0; ii < Math.min(this._filmCardsArray.length, FILM_CARDS_COUNT_PER_STEP); ii++) {
       const filmCard = this._getFilmCard(this._filmCardsArray[ii]);
-      this._renderedFilmCards.push(filmCard);
       render(filmsListContainer, filmCard, RenderPosition.BEFOREEND);
       // const sitePopup = this._getPopup(this._filmCardsArray[ii]);
       // const popupCommentsContainer = sitePopup.getElement().querySelector('.film-details__comments-list');
@@ -279,7 +369,7 @@ export default class MoviesBoard {
       //   this._showPopup(sitePopup);
       //   this._changeStatisticsByClickPopupButtons(filmCard, sitePopup);
       // });
-      this._changeStatisticsByClickFilmCardButtons(filmCard);
+      // this._changeStatisticsByClickFilmCardButtons(filmCard);
     }
   }
 
@@ -296,7 +386,6 @@ export default class MoviesBoard {
           .forEach((filmCard) => {
             const filmCardLoaded = this._getFilmCard(filmCard);
             render(filmsListContainer, filmCardLoaded, RenderPosition.BEFOREEND);
-            this._renderedFilmCards.push(filmCardLoaded);
             // const sitePopupLoaded = this._getPopup(filmCard);
             // const popupCommentsContainerLoaded = sitePopupLoaded.getElement().querySelector('.film-details__comments-list');
             // filmCard.commentsList.forEach((item) => {
@@ -336,7 +425,6 @@ export default class MoviesBoard {
     // Добавляет фильмы в контейнер с наибольшим рейтингом
     for (let ii = 0; ii < 2; ii++) {
       const filmCardTopRated = this._getFilmCard(sortedFilmCardsByRating[ii]);
-      this._renderedFilmCards.push(filmCardTopRated);
       render(topRatedFilmsContainer, filmCardTopRated, RenderPosition.BEFOREEND);
       // const sitePopupTopRated = this._getPopup(sortedFilmCardsByRating[ii]);
       // const popupCommentsContainerTopRated = sitePopupTopRated.getElement().querySelector('.film-details__comments-list');
@@ -348,7 +436,7 @@ export default class MoviesBoard {
       //   this._showPopup(sitePopupTopRated);
       //   this._changeStatisticsByClickPopupButtons(filmCardTopRated, sitePopupTopRated);
       // });
-      this._changeStatisticsByClickFilmCardButtons(filmCardTopRated);
+      // this._changeStatisticsByClickFilmCardButtons(filmCardTopRated);
     }
   }
 
@@ -361,11 +449,10 @@ export default class MoviesBoard {
 
     const sortedFilmCardsByComments = this._sortFilmsByComments(this._filmCardsArray);
 
-    // Добаdляет фильмы в контейнер с наибольшим рейтингом
+    // Добаdляет фильмы в контейнер с наиболььшим количеством комментариев
     for (let ii = 0; ii < 2; ii++) {
-      const filmCardMostCommented = this._getFilmCard(sortedFilmCardsByComments[ii]);
+      const filmCardMostCommented = this._getFilmCard(sortedFilmCardsByComments[ii])
       render(mostCommentedFilmsContainer, filmCardMostCommented, RenderPosition.BEFOREEND);
-      this._renderedFilmCards.push(filmCardMostCommented);
       // const sitePopupMostCommented = this._getPopup(sortedFilmCardsByComments[ii]);
       // const popupCommentsContainerMostCommented = sitePopupMostCommented.getElement().querySelector('.film-details__comments-list');
       // sortedFilmCardsByComments[ii].commentsList.forEach((item) => {
@@ -377,7 +464,7 @@ export default class MoviesBoard {
       //   this._showPopup(sitePopupMostCommented);
       //   this._changeStatisticsByClickPopupButtons(filmCardMostCommented, sitePopupMostCommented);
       // });
-      this._changeStatisticsByClickFilmCardButtons(filmCardMostCommented);
+      // this._changeStatisticsByClickFilmCardButtons(filmCardMostCommented);
     }
   }
 
